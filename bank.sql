@@ -55,6 +55,7 @@ create table user
     sex         varchar(2)    null comment '性别',
     card_number varchar(19)   not null comment '银行卡号',
     status      int default 0 null comment '状态 0:禁用，1:正常',
+    update_user bigint        not null comment '修改人',
     constraint user_pk
         unique (phone)
 )
