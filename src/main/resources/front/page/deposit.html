@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deposit Funds</title>
+    <style>
+        /* ... [reuse styles from previous HTML or add new styles] ... */
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        input {
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #cc0000;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #a30000;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>存入资金</h2>
+    <p>卡号: <strong>1234 5678 9012 3456</strong></p>
+    <p>当前余额: <strong>¥ 50,000.00</strong></p>
+
+    <form id="depositForm">
+        <label for="amount">存入金额:</label>
+        <input type="number" id="amount" name="amount" placeholder="请输入存入金额" required>
+        <button type="submit">提交</button>
+    </form>
+
+    <p id="message"></p>
+</div>
+
+<script>
+    document.getElementById('depositForm').onsubmit = function(event) {
+        event.preventDefault();
+        // Perform the deposit logic here
+        var amount = document.getElementById('amount').value;
+        // For now, we will just display a success message
+        document.getElementById('message').textContent = '存入成功！';
+        // In real application, here you would send 'amount' to the server
+    };
+</script>
+</body>
+</html>

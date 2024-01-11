@@ -1,0 +1,76 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mobile Banking Products</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #fff;
+            color: #333;
+        }
+        .header {
+            background-color: #cc0000;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+        }
+        .product-list {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+        .product-item {
+            border-bottom: 1px solid #ddd;
+            padding: 10px;
+        }
+        .product-item:last-child {
+            border-bottom: none;
+        }
+        .annual-interest-rate {
+            color: #cc0000;
+            font-size: larger;
+            display: block; /* Make it a block for larger text */
+        }
+        .product-link {
+            display: block;
+            text-align: center;
+            padding: 10px;
+            background-color: #cc0000;
+            color: white;
+            text-decoration: none;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+<div class="header">
+    <h1>存款</h1>
+</div>
+<ul class="product-list">
+    <!-- Example products -->
+    <li class="product-item">
+        <h3>一年定期存款</h3>
+        <span class="annual-interest-rate">年转化率: 2.05%</span>
+        <p>存期: 12个月</p>
+        <a href="page/banking_product_details.html" class="product-link">查看详情</a>
+    </li>
+    <li class="product-item">
+        <h3>一个月定期存款</h3>
+        <span class="annual-interest-rate">年转化率: 4.00%</span>
+        <p>存期: 1个月</p>
+        <a href="product_detail_2.html" class="product-link">查看详情</a>
+    </li>
+    <li class="product-item">
+        <h3>三个月定期存款</h3>
+        <span class="annual-interest-rate">年转化率: 1.25%e</span>
+        <p>存期: 3个月</p>
+        <a href="product_detail_3.html" class="product-link">查看详情</a>
+    </li>
+</ul>
+</body>
+</html>
