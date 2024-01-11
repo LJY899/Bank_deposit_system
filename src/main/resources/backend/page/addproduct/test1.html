@@ -51,6 +51,42 @@
             var graph = new mxGraph(container);
             graph.setConnectable(true);
             graph.setPortsEnabled(false);
+            graph.setTooltips(true);
+            graph.getCursorForCell = function (cell) {
+                if (cell != null && cell.value != null && cell.vertex == 1) {
+                    return 'pointer';
+                }
+            };
+
+            // 不自定义getTooltipForCell方法，则tooltip默认为cell的value值
+            graph.getTooltipForCell = function(cell) {
+                // 检查cell的value以确定它是哪一个
+                if (cell != null && cell.value != null) {
+                    if (cell.value === '白名单购买控制接口') {
+                        return "白名单购买控制接口说明还没改";
+                    } else if (cell.value === '地域购买控制接口') {
+                        return "地域购买控制接口说明还没改";
+                    } else if (cell.value === '用户标签控制接口') {
+                        return "用户标签控制接口说明还没改";
+                    } else if (cell.value === '重复购买控制接口') {
+                        return "重复购买控制接口说明还没改";
+                    } else if (cell.value === '利息计算接口') {
+                        return "利息计算接口说明还没改";
+                    } else if (cell.value === '库存锁定接口') {
+                        return "库存锁定接口说明还没改";
+                    } else if (cell.value === '库存释放接口') {
+                        return "库存释放接口说明还没改";
+                    } else if (cell.value === '库存更新接口') {
+                        return "库存更新接口说明还没改";
+                    } else if (cell.value === '日志录入接口') {
+                        return "日志录入接口说明还没改";
+                    } else if (cell.value === '证件审查接口') {
+                        return "证件审查接口说明还没改";
+                    }
+                }
+                // 默认返回
+                return "";
+            }
             new mxRubberband(graph);
             var edgeStyle = graph.getStylesheet().getDefaultEdgeStyle();
             edgeStyle[mxConstants.STYLE_STROKECOLOR] = '#000000'; // 设置边的颜色为红色
@@ -97,7 +133,6 @@
             mxDoubleEllipse.prototype.getPorts = function(){return port3;};
             // 监听键盘事件
             document.addEventListener('keydown', function(event) {
-                // 检查是否按下了删除键 (keyCode 为 46)
                 if (event.keyCode === 46) {
                     var selectionCells = graph.getSelectionCells();
                     if (selectionCells != null && selectionCells.length > 0) {
@@ -172,7 +207,7 @@
 
                 var tool = graph.insertVertex(root, null, '', 2, 4, toolW, toolH, 'editable=0;fillColor=#FFFFFF;resizable=0;movable=0;selectable=0;rounded=1;strokeColor=#000000;strokeWidth=2');
                 var tX=tool.x,tY=tool.y,tW=tool.width,tH=tool.height;
-                var titl = graph.insertVertex(root, null, '用户信息验证接口', 2, 4, toolW,toolH*0.05,'editable=0;fillColor=#FFFFFF;resizable=0;movable=0;selectable=0;strokeColor=#000000;strokeWidth=2');
+                var titl = graph.insertVertex(root, null, '原子服务', 2, 4, toolW,toolH*0.05,'editable=0;fillColor=#FFFFFF;resizable=0;movable=0;selectable=0;strokeColor=#000000;strokeWidth=2');
                 var v1 = graph.insertVertex(root, null, '白名单购买控制接口', toolW*0.15, toolH*0.08,toolW*0.7 ,50,'shape=ellipse;editable=0;fillColor=#FFFFFF;resizable=0;selectable=0;strokeColor=#000000;strokeWidth=2');
                 var v2 = graph.insertVertex(root, null, '地域购买控制接口', toolW*0.15, toolH*0.16,toolW*0.7 ,50,'shape=ellipse;editable=0;fillColor=#FFFFFF;resizable=0;selectable=0;strokeColor=#000000;strokeWidth=2');
                 var v3 = graph.insertVertex(root, null, '用户标签控制接口', toolW*0.15, toolH*0.24,toolW*0.7 ,50,'shape=ellipse;editable=0;fillColor=#FFFFFF;resizable=0;selectable=0;strokeColor=#000000;strokeWidth=2');
@@ -185,8 +220,6 @@
                 var v10 = graph.insertVertex(root, null, '证件审查接口', toolW*0.15, toolH*0.8,toolW*0.7 ,50,'shape=rhombus;editable=0;fillColor=#FFFFFF;resizable=0;selectable=0;strokeColor=#000000;strokeWidth=2');
                 var v11 = graph.insertVertex(root, null, '结束', toolW*0.3, toolH*0.88,50 ,50,'shape=doubleEllipse;editable=0;fillColor=#000000;resizable=0;strokeColor=#FFFFFF;strokeWidth=2');
                 var v12 = graph.insertVertex(root, null, '开始', toolW*4, toolH*0.08,50 ,50,'shape=ellipse;editable=0;fillColor=#000000;resizable=0;strokeColor=#FFFFFF;strokeWidth=2');
-
-
 
 
 
