@@ -35,16 +35,7 @@
           />
         </el-form-item>
 
-        <el-form-item
-          label="密码:"
-          prop="password"
-        >
-          <el-input
-            v-model="ruleForm.password"
-            placeholder="请输入密码:"
-            maxlength="11"
-          />
-        </el-form-item>
+
         <el-form-item
           label="性别:"
           prop="sex"
@@ -107,7 +98,6 @@
             actionType : '',
             ruleForm : {
                 'name': '',
-                'password': '',
                 'sex': '男',
                 'cardNumber': '',
                 phone: ''
@@ -147,7 +137,6 @@
                 console.log(res.data)
                 this.ruleForm = res.data
                 this.ruleForm.sex = res.data.sex === '0' ? '女' : '男'
-                this.ruleForm.password = res.data.password
               } else {
                 this.$message.error(res.msg || '操作失败')
               }
@@ -170,7 +159,6 @@
                         this.ruleForm = {
                           phone: '',
                           'name': '',
-                          'password': '',
                           'sex': '男',
                           'cardNumber': ''
                         }
