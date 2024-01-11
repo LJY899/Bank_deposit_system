@@ -1,21 +1,28 @@
 package cn.zjut.entity;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
-
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
-public class Product implements Serializable {
+public class Product implements Serializable{
+
+    /**
+     产品
+     */
 
     private static final long serialVersionUID = 1L;
 
     // 产品ID
+    @TableId(type= IdType.AUTO)
     private Long productId;
+
 
     // 产品名称
     private String name;
@@ -50,6 +57,8 @@ public class Product implements Serializable {
     // 产品状态
     private String productStatus;
 
+
+
     //顺序
     private Integer sort;
 
@@ -68,5 +77,4 @@ public class Product implements Serializable {
 
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private Long updateUser;
-
 }
