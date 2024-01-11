@@ -29,9 +29,9 @@
         ></i>
       </el-input>
       <div class="tableLab">
-        <span class="span-btn delBut non" @click="deleteHandle('批量', null)">批量删除</span>
-        <span class="span-btn blueBug non" @click="statusHandle('1')">批量上线</span>
-        <span style="border:none;" class="span-btn delBut non" @click="statusHandle('0')">批量下线</span>
+        <span class="span-btn delBut non" @click="deleteHandle('批量')">批量删除</span>
+        <span class="span-btn blueBug non" @click="statusHandle('上线')">批量上线</span>
+        <span style="border:none;" class="span-btn delBut non" @click="statusHandle('已下线')">批量下线</span>
       </div>
     </div>
     <el-table
@@ -90,7 +90,7 @@
       ></el-table-column>
       <el-table-column label="状态">
         <template slot-scope="scope">
-          <span style="margin-right: 10px;">{{ scope.row.productStatus == '在售' ? '在售' : '停售' }}</span>
+          <span style="margin-right: 10px;">{{ scope.row.productStatus == '上线' ? '上线' : '已下线' }}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -108,7 +108,7 @@
                   type="text"
                   size="small"
                   class="blueBug"
-                  @click="addFoodtype(scope.row.id)"
+                  @click="addFoodtype(scope.row.productId)"
           >
             修改
           </el-button>
@@ -118,13 +118,13 @@
                   class="blueBug"
                   @click="statusHandle(scope.row)"
           >
-            {{ scope.row.status == '0' ? '启售' : '停售' }}
+            {{ scope.row.productStatus == '已下线' ? '上线' : '下线' }}
           </el-button>
           <el-button
                   type="text"
                   size="small"
                   class="delBut non"
-                  @click="deleteHandle('单删', scope.row.id)"
+                  @click="deleteHandle('单删', scope.row.productId)"
           >
             删除
           </el-button>
@@ -206,36 +206,39 @@
           window.parent.menuHandle({
             id: '4',
             url: '/backend/page/food/add.html?id=' + st,
-            name: '修改产品'
+            name: '修改菜品'
           }, true)
         }
       },
 
 
 
-        // 删除
-        deleteHandle (type, id) {
-          if (type === '批量' && id === null) {
-            if (this.checkList.length === 0) {
-              return this.$message.error('请选择删除对象')
-            }
+      // 删除
+      deleteHandle (type, productId) {
+        console.log('type:', type);
+        console.log('productId:', productId);
+        console.log('checkList:', this.checkList);
+        if (type === '批量' && productId === null) {
+          if (this.checkList.length === 0) {
+            return this.$message.error('请选择删除对象')
           }
-          this.$confirm('确认删除该产品, 是否继续?', '确定删除', {
-            'confirmButtonText': '确定',
-            'cancelButtonText': '取消',
-          }).then(() => {
-            deleteProduct(type === '批量' ? this.checkList.join(',') : id).then(res => {
-              if (res.code === 1) {
-                this.$message.success('删除成功！')
-                this.handleQuery()
-              } else {
-                this.$message.error(res.msg || '操作失败')
-              }
-            }).catch(err => {
-              this.$message.error('请求出错了：' + err)
-            })
+        }
+        this.$confirm('确认删除该产品, 是否继续?', '确定删除', {
+          'confirmButtonText': '确定',
+          'cancelButtonText': '取消',
+        }).then(() => {
+          deleteProduct(type === '批量' ? this.checkList.join(',') : productId).then(res => {
+            if (res.code === 1) {
+              this.$message.success('删除成功！')
+              this.handleQuery()
+            } else {
+              this.$message.error(res.msg || '操作失败')
+            }
+          }).catch(err => {
+            this.$message.error('请求出错了：' + err)
           })
-        },
+        })
+      },
 
 
 
@@ -252,7 +255,7 @@
           params.productStatus = row
         } else {
           params.productId= row.productId
-          params.productStatus = row.productStatus === "在售" ? "停售" : "在售";
+          params.productStatus = row.productStatus === "上线" ? "已下线" : "上线";
 
         }
         this.productStatus = params
@@ -279,7 +282,7 @@
       handleSelectionChange (val){
         let checkArr = []
         val.forEach((n) => {
-          checkArr.push(n.id)
+          checkArr.push(n.productId)
         })
         this.checkList = checkArr
       },

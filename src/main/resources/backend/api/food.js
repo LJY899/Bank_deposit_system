@@ -35,21 +35,13 @@ const addProduct = (params) => {
 }
 
 // 查询详情
-const queryproductById = (id) => {
+const queryproductById = (productId) => {
   return $axios({
-    url: `/product/${id}`,
+    url: `/product/${productId}`,
     method: 'get'
   })
 }
 
-// 获取菜品分类列表
-const getCategoryList = (params) => {
-  return $axios({
-    url: '/category/list',
-    method: 'get',
-    params
-  })
-}
 
 // 查菜品列表的接口
 const queryproductList = (params) => {
@@ -77,6 +69,6 @@ const productStatusByStatus = (params) => {
   return $axios({
     url: `/product/productStatus/${params.productStatus}`,
     method: 'post',
-    params: { ids: params.id }
+    params: { ids: params.productId }
   })
 }
