@@ -48,6 +48,15 @@ function checkPhone (rule, value, callback){
   }
 }
 
+function checkPassword(rule, value, callback) {
+  if (value === "") {
+    callback(new Error("请输入密码"));
+  } else if (value.length < 6) {
+    callback(new Error("密码不能少于6位"));
+  } else {
+    callback();
+  }
+}
 
 function validID (rule,value,callback) {
   // 身份证号码为15位或者18位，15位时全为数字，18位前17位为数字，最后一位是校验位，可能为数字或字符X
@@ -58,5 +67,16 @@ function validID (rule,value,callback) {
     callback()
   } else {
     callback(new Error('身份证号码不正确'))
+  }
+}
+function validBankCard(rule, value, callback) {
+  // 银行卡号为19位数字
+  let reg = /^\d{19}$/;
+  if (value === '') {
+    callback(new Error('请输入银行卡号'));
+  } else if (reg.test(value)) {
+    callback();
+  } else {
+    callback(new Error('银行卡号不正确'));
   }
 }

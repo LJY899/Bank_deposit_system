@@ -1,5 +1,7 @@
 package cn.zjut.entity;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -38,9 +40,10 @@ public class User implements Serializable {
 
 
     //头像
-    private String avatar;
+    //private String avatar;
 
 
     //状态 0:禁用，1:正常
     private Integer status;
+
 }
