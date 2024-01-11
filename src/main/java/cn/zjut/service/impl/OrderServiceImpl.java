@@ -21,5 +21,20 @@ import java.util.stream.Collectors;
 @Service
 @Slf4j
 public class OrderServiceImpl extends ServiceImpl<OrderMapper, Orders> implements OrderService {
+    /**
+     * 用户下单
+     * @param orders
+     */
+    @Transactional
+    public void submit(Orders orders){
+        //获得当前用户id
+        //Long userId = BaseContext.getCurrentId();
+        //查询当前用户选择的产品id
+        //LambdaQueryWrapper wrapper
+        //向订单表插入数据，一条数据
 
+        //向订单明细表？
+
+        //
+    }
 }

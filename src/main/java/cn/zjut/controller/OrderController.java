@@ -34,9 +34,14 @@ public class OrderController {
         if(name!=null)
             queryWrapper.like(Orders::getNumber,name);
         //添加排序条件
-        queryWrapper.orderByDesc(Orders::getOrderTime);
+        queryWrapper.orderByDesc(Orders::getTime);
         //执行查询
         orderService.page(pageInfo,queryWrapper);
         return R.success(pageInfo);
+    }
+    @PostMapping("/submit")
+    public R<String> submit(@RequestBody Orders orders){
+        orderService.submit(orders);
+        return R.success("成功！！");
     }
 }
