@@ -32,7 +32,23 @@ public class ProductController {
         // 直接返回分页对象即可，不需要额外操作
         return R.success(pageInfo);
     }
+    /**
+     * 新增产品
+     * @param product 包含产品信息的请求体
+     * @return 新增成功的产品信息
+     */
+    @PostMapping
+    public R<String> saveProduct(@RequestBody Product product) {
+        log.info("新增产品，产品信息：{}", product.toString());
 
+        boolean result = productService.save(product);
+
+        if (result) {
+            return R.success("新增产品成功");
+        } else {
+            return R.error("新增产品失败");
+        }
+    }
     @GetMapping("/{productId}")
     public R<Product> get(@PathVariable Long productId ) {
         Product product = productService.getByIdWithFlavor(productId);
