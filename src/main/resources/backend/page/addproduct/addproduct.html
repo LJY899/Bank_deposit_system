@@ -5,8 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <title>添加银行存款产品</title>
     <link rel="stylesheet" href="https://cdn.staticfile.org/layui/2.5.6/css/layui.css">
-    <script src="https://cdn.staticfile.org/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdn.staticfile.org/layui/2.5.6/layui.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 </head>
 <body>
 
@@ -66,21 +67,6 @@
                         <input type="radio" name="riskLevel" value="高风险" title="高风险" lay-verify="required">
                     </div>
                 </div>
-
-                <div class="layui-form-item">
-                    <label class="layui-form-label">起息日</label>
-                    <div class="layui-input-inline">
-                        <input type="date" name="startDate" lay-verify="required" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-
-                <div class="layui-form-item">
-                    <label class="layui-form-label">到期日</label>
-                    <div class="layui-input-inline">
-                        <input type="date" name="maturityDate" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-
                 <!-- 结息方式下拉框 -->
                 <div class="layui-form-item">
                     <label class="layui-form-label">结息方式</label>
@@ -90,17 +76,6 @@
                             <option value="月结">月结</option>
                             <option value="季度结">季度结</option>
                             <option value="年结">年结</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="layui-form-item">
-                    <label class="layui-form-label">产品状态</label>
-                    <div class="layui-input-block" style="width: 200px;">
-                        <select name="productStatus" lay-verify="required">
-                            <option value="">请选择产品状态</option>
-                            <option value="在售">在售</option>
-                            <option value="停售">停售</option>
                         </select>
                     </div>
                 </div>
@@ -127,18 +102,30 @@
         form.render(null, 'addProductForm');
 
         form.on('submit(addProduct)', function(data){
+            // 获取当前日期作为起息日
+            var currentDate = new Date();
+            var startDate = currentDate.toISOString().split('T')[0];  // 格式化为 'YYYY-MM-DD'
+
+            // 获取产品期限
+            var tenure = parseInt(data.field.tenure);  // 假设tenure是整数
+
+            // 计算到期日
+            var maturityDate = new Date(currentDate);
+            maturityDate.setMonth(currentDate.getMonth() + tenure);
+            maturityDate = maturityDate.toISOString().split('T')[0];  // 格式化为 'YYYY-MM-DD'
+
             var productData = {
                 name: data.field.name,
-                startDate: data.field.startDate,
-                tenure: data.field.tenure,
+                startDate: startDate,
+                tenure: tenure,
                 annualInterestRate: data.field.annualInterestRate,
                 minDepositAmount: data.field.minDepositAmount,
                 singleLimitAmount: data.field.singleLimitAmount,
                 dailyLimitAmount: data.field.dailyLimitAmount,
                 riskLevel: data.field.riskLevel,
                 interestPayment: data.field.interestPayment,
-                maturityDate: data.field.maturityDate,
-                productStatus: data.field.productStatus
+                maturityDate: maturityDate,
+                productStatus: "在售"  // 默认设置为"在售"
             };
 
             $.ajax({
