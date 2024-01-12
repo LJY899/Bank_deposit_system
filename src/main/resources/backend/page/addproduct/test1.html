@@ -439,6 +439,28 @@
         function resetGraph() {
             window.location.reload();
         }
+        function handleFileSelect(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const xmlContent = e.target.result;
+                loadGraphFromXML(xmlContent);
+            };
+            reader.readAsText(file);
+        }
+
+        function loadGraphFromXML(xmlContent) {
+            if (!graph) {
+                alert('Graph is not initialized!');
+                return;
+            }
+
+            const doc = mxUtils.parseXml(xmlContent);
+            const codec = new mxCodec(doc);
+            codec.decode(doc.documentElement, graph.getModel());
+        }
     </script>
 
 
@@ -449,12 +471,12 @@
 
 <div id="buttonsContainer">
 
-    <button  onclick="exportGraphToXML()">设为模板</button>
-    <!-- 保存按钮，黄色背景，白色边框 -->
+    <input type="file" id="fileInput" style="display: none; color: black; border: 1px solid #d8dde3;" accept=".xml" onchange="handleFileSelect(event)">
+    <button onclick="document.getElementById('fileInput').click()">加载模板</button>
+    <button onclick="exportGraphToXML()" style="background-color: #fd7065; color: black; border: 1px solid #d8dde3;">设为模板</button>
     <button onclick="saveGraph()" style="background-color: #ffc200; color: black; border: 1px solid #d8dde3;">保存</button>
-    <!-- 重置按钮，保持默认样式 -->
     <button onclick="resetGraph()" style="background-color: black; color: white; border: 1px solid #d8dde3;">重置</button>
-</div>
 
+</div>
 </body>
 </html>
