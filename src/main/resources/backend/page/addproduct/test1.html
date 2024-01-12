@@ -44,10 +44,53 @@
             border-radius: 5px;
         }
     </style>
-
+    <style type="text/css">
+        body div.mxPopupMenu {
+            -webkit-box-shadow: 3px 3px 6px #C0C0C0;
+            -moz-box-shadow: 3px 3px 6px #C0C0C0;
+            box-shadow: 3px 3px 6px #C0C0C0;
+            background: white;
+            position: absolute;
+            border: 3px solid #e7e7e7;
+            padding: 3px;
+        }
+        body table.mxPopupMenu {
+            border-collapse: collapse;
+            margin: 0px;
+        }
+        body tr.mxPopupMenuItem {
+            color: black;
+            cursor: default;
+        }
+        body td.mxPopupMenuItem {
+            padding: 6px 60px 6px 30px;
+            font-family: Arial;
+            font-size: 10pt;
+        }
+        body td.mxPopupMenuIcon {
+            background-color: white;
+            padding: 0px;
+        }
+        body tr.mxPopupMenuItemHover {
+            background-color: #eeeeee;
+            color: black;
+        }
+        table.mxPopupMenu hr {
+            border-top: solid 1px #cccccc;
+        }
+        table.mxPopupMenu tr {
+            font-size: 4pt;
+        }
+    </style>
     <script type="text/javascript">
         function main(container) {
             mxConstraintHandler.prototype.pointImage = new mxImage('images/dot.gif', 10, 10);
+            mxEvent.disableContextMenu(document.body);
+
+            // Changes some default colors
+            mxConstants.HANDLE_FILLCOLOR = '#99ccff';
+            mxConstants.HANDLE_STROKECOLOR = '#0088cf';
+            mxConstants.VERTEX_SELECTION_COLOR = '#00a8ff';
             var graph = new mxGraph(container);
             graph.setConnectable(true);
             graph.setPortsEnabled(false);
@@ -205,22 +248,131 @@
 
                 var toolW = pageWidth * 0.15, toolH = pageHeight * 0.9;
 
-                var tool = graph.insertVertex(root, null, '', 2, 4, toolW, toolH, 'editable=0;fillColor=#FFFFFF;resizable=0;movable=0;selectable=0;rounded=1;strokeColor=#000000;strokeWidth=2');
-                var tX=tool.x,tY=tool.y,tW=tool.width,tH=tool.height;
+                var tool = graph.insertVertex(root, null, '模板', 2, 4, toolW, toolH, 'editable=0;fillColor=#FFFFFF;resizable=0;movable=0;selectable=0;rounded=1;strokeColor=#000000;strokeWidth=2');
                 var titl = graph.insertVertex(root, null, '原子服务', 2, 4, toolW,toolH*0.05,'editable=0;fillColor=#FFFFFF;resizable=0;movable=0;selectable=0;strokeColor=#000000;strokeWidth=2');
-                var v1 = graph.insertVertex(root, null, '白名单购买控制接口', toolW*0.15, toolH*0.08,toolW*0.7 ,50,'shape=ellipse;editable=0;fillColor=#FFFFFF;resizable=0;selectable=0;strokeColor=#000000;strokeWidth=2');
-                var v2 = graph.insertVertex(root, null, '地域购买控制接口', toolW*0.15, toolH*0.16,toolW*0.7 ,50,'shape=ellipse;editable=0;fillColor=#FFFFFF;resizable=0;selectable=0;strokeColor=#000000;strokeWidth=2');
-                var v3 = graph.insertVertex(root, null, '用户标签控制接口', toolW*0.15, toolH*0.24,toolW*0.7 ,50,'shape=ellipse;editable=0;fillColor=#FFFFFF;resizable=0;selectable=0;strokeColor=#000000;strokeWidth=2');
-                var v4 = graph.insertVertex(root, null, '重复购买控制接口', toolW*0.15, toolH*0.32,toolW*0.7 ,50,'shape=ellipse;editable=0;fillColor=#FFFFFF;resizable=0;selectable=0;strokeColor=#000000;strokeWidth=2');
-                var v5 = graph.insertVertex(root, null, '利息计算接口', toolW*0.15, toolH*0.40,toolW*0.7 ,50,'shape=ellipse;editable=0;fillColor=#FFFFFF;resizable=0;selectable=0;strokeColor=#000000;strokeWidth=2');
-                var v6 = graph.insertVertex(root, null, '库存锁定接口', toolW*0.15, toolH*0.48,toolW*0.7 ,50,'shape=ellipse;editable=0;fillColor=#FFFFFF;resizable=0;selectable=0;strokeColor=#000000;strokeWidth=2');
-                var v7 = graph.insertVertex(root, null, '库存释放接口', toolW*0.15, toolH*0.56,toolW*0.7 ,50,'shape=rhombus;editable=0;fillColor=#FFFFFF;resizable=0;selectable=0;strokeColor=#000000;strokeWidth=2');
-                var v8 = graph.insertVertex(root, null, '库存更新接口', toolW*0.15, toolH*0.64,toolW*0.7 ,50,'shape=rhombus;editable=0;fillColor=#FFFFFF;resizable=0;selectable=0;strokeColor=#000000;strokeWidth=2');
-                var v9 = graph.insertVertex(root, null, '日志录入接口', toolW*0.15, toolH*0.72,toolW*0.7 ,50,'shape=rhombus;editable=0;fillColor=#FFFFFF;resizable=0;selectable=0;strokeColor=#000000;strokeWidth=2');
-                var v10 = graph.insertVertex(root, null, '证件审查接口', toolW*0.15, toolH*0.8,toolW*0.7 ,50,'shape=rhombus;editable=0;fillColor=#FFFFFF;resizable=0;selectable=0;strokeColor=#000000;strokeWidth=2');
-                var v11 = graph.insertVertex(root, null, '结束', toolW*0.3, toolH*0.88,50 ,50,'shape=doubleEllipse;editable=0;fillColor=#000000;resizable=0;strokeColor=#FFFFFF;strokeWidth=2');
+                var v1 = graph.insertVertex(tool, null, '白名单购买控制接口', toolW*0.15, toolH*0.08,toolW*0.7 ,50,'shape=ellipse;editable=0;fillColor=#FFFFFF;resizable=0;selectable=0;strokeColor=#000000;strokeWidth=2');
+                var v2 = graph.insertVertex(tool, null, '地域购买控制接口', toolW*0.15, toolH*0.16,toolW*0.7 ,50,'shape=ellipse;editable=0;fillColor=#FFFFFF;resizable=0;selectable=0;strokeColor=#000000;strokeWidth=2');
+                var v3 = graph.insertVertex(tool, null, '用户标签控制接口', toolW*0.15, toolH*0.24,toolW*0.7 ,50,'shape=ellipse;editable=0;fillColor=#FFFFFF;resizable=0;selectable=0;strokeColor=#000000;strokeWidth=2');
+                var v4 = graph.insertVertex(tool, null, '重复购买控制接口', toolW*0.15, toolH*0.32,toolW*0.7 ,50,'shape=ellipse;editable=0;fillColor=#FFFFFF;resizable=0;selectable=0;strokeColor=#000000;strokeWidth=2');
+                var v5 = graph.insertVertex(tool, null, '利息计算接口', toolW*0.15, toolH*0.40,toolW*0.7 ,50,'shape=ellipse;editable=0;fillColor=#FFFFFF;resizable=0;selectable=0;strokeColor=#000000;strokeWidth=2');
+                var v6 = graph.insertVertex(tool, null, '库存锁定接口', toolW*0.15, toolH*0.48,toolW*0.7 ,50,'shape=ellipse;editable=0;fillColor=#FFFFFF;resizable=0;selectable=0;strokeColor=#000000;strokeWidth=2');
+                var v7 = graph.insertVertex(tool, null, '库存释放接口', toolW*0.15, toolH*0.56,toolW*0.7 ,50,'shape=rhombus;editable=0;fillColor=#FFFFFF;resizable=0;selectable=0;strokeColor=#000000;strokeWidth=2');
+                var v8 = graph.insertVertex(tool, null, '库存更新接口', toolW*0.15, toolH*0.64,toolW*0.7 ,50,'shape=rhombus;editable=0;fillColor=#FFFFFF;resizable=0;selectable=0;strokeColor=#000000;strokeWidth=2');
+                var v9 = graph.insertVertex(tool, null, '日志录入接口', toolW*0.15, toolH*0.72,toolW*0.7 ,50,'shape=rhombus;editable=0;fillColor=#FFFFFF;resizable=0;selectable=0;strokeColor=#000000;strokeWidth=2');
+                var v10 = graph.insertVertex(tool, null, '证件审查接口', toolW*0.15, toolH*0.8,toolW*0.7 ,50,'shape=rhombus;editable=0;fillColor=#FFFFFF;resizable=0;selectable=0;strokeColor=#000000;strokeWidth=2');
+                var v11 = graph.insertVertex(tool, null, '结束', toolW*0.3, toolH*0.88,50 ,50,'shape=doubleEllipse;editable=0;fillColor=#000000;resizable=0;strokeColor=#FFFFFF;strokeWidth=2');
                 var v12 = graph.insertVertex(root, null, '开始', toolW*4, toolH*0.08,50 ,50,'shape=ellipse;editable=0;fillColor=#000000;resizable=0;strokeColor=#FFFFFF;strokeWidth=2');
+                graph.popupMenuHandler.autoExpand = true;
 
+                // Installs context menu
+                // Installs context menu
+                graph.popupMenuHandler.factoryMethod = function(menu, cell, evt) {
+
+                    if (cell != null) { // 检查是否点击了一个单元格（顶点或边）
+                        if (graph.getModel().isVertex(cell) && (cell.value !== '模板' && cell.value !== '原子服务')) { // 检查是否点击的是顶点
+                            menu.addItem('从流程中移除', null, function() {
+                                if (graph.getModel().isVertex(cell)) {
+                                    // 删除与顶点相关的所有边
+                                    graph.removeCells(graph.getEdges(cell));
+                                    var x, y;
+
+                                    // 根据 cell.value 设置不同的位置
+                                    switch (cell.value) {
+                                        case '白名单购买控制接口':
+                                            x = toolW * 0.15;
+                                            y = toolH * 0.08;
+                                            break;
+                                        case '地域购买控制接口':
+                                            x = toolW * 0.15;
+                                            y = toolH * 0.16;
+                                            break;
+                                        case '用户标签控制接口':
+                                            x = toolW * 0.15;
+                                            y = toolH * 0.24;
+                                            break;
+                                        case '重复购买控制接口':
+                                            x = toolW * 0.15;
+                                            y = toolH * 0.32;
+                                            break;
+                                        case '利息计算接口':
+                                            x = toolW * 0.15;
+                                            y = toolH * 0.4;
+                                            break;
+                                        case '库存锁定接口':
+                                            x = toolW * 0.15;
+                                            y = toolH * 0.48;
+                                            break;
+                                        case '库存释放接口':
+                                            x = toolW * 0.15;
+                                            y = toolH * 0.56;
+                                            break;
+                                        case '库存更新接口':
+                                            x = toolW * 0.15;
+                                            y = toolH * 0.64;
+                                            break;
+                                        case '日志录入接口':
+                                            x = toolW * 0.15;
+                                            y = toolH * 0.72;
+                                            break;
+                                        case '证件审查接口':
+                                            x = toolW * 0.15;
+                                            y = toolH * 0.8;
+                                            break;
+                                        case '结束':
+                                            x = toolW * 0.3;
+                                            y = toolH * 0.88;
+                                            break;
+                                        default:
+                                            x = 200; // 默认位置
+                                            y = 200;
+                                            break;
+                                    }
+
+                                    // 设置顶点的位置
+                                    var geometry = cell.getGeometry().clone();
+                                    geometry.x = x;
+                                    geometry.y = y;
+                                    graph.getModel().setGeometry(cell, geometry);
+
+                                    // 刷新图形显示
+                                    graph.refresh();
+                                }
+                            });
+                            menu.addItem('锁定/解锁', null, function() {
+                                if (graph.getModel().isVertex(cell)) {
+                                    // 切换顶点的锁定状态
+                                    var state = graph.view.getState(cell);
+                                    if (state != null) {
+                                        var style = state.style;
+                                        var movable = mxUtils.getValue(style, mxConstants.STYLE_MOVABLE, '1') == '0' ? 1 : 0;
+
+                                        // 更新样式中的可移动属性
+                                        graph.setCellStyles(mxConstants.STYLE_MOVABLE, movable, [cell]);
+                                    }
+                                }
+                            });
+                            // menu.addItem('Edit Vertex', null, function() {
+                            //   // 在此处添加编辑顶点的操作，例如打开一个模态框
+                            //   alert('Edit Vertex: ' + cell.value);
+                            // });
+                        } else if (graph.getModel().isEdge(cell)) { // 检查是否点击的是边
+                            menu.addItem('Delete Edge', null, function() {
+                                graph.getModel().remove(cell);
+                            });
+                            menu.addItem('Edit Edge', null, function() {
+                                // 在此处添加编辑边的操作，例如改变边的样式或属性
+                                alert('Edit Edge connecting ' + cell.source.value + ' and ' + cell.target.value);
+                            });
+                        }
+                    } else { // 如果点击的是空白区域，你可以添加一些默认的菜单项
+                        menu.addItem('Default Option 1', null, function() {
+                            alert('Default Option 1 for empty space');
+                        });
+                        menu.addItem('Default Option 2', null, function() {
+                            alert('Default Option 2 for empty space');
+                        });
+                    }
+                };
 
 
             } finally {
