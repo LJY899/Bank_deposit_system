@@ -22,7 +22,7 @@ public class UserController {
     @Autowired
     private UserService userService;
     /**
-     * 新增员工
+     * 新增用户
      * @param user
      * @return
      */
@@ -34,10 +34,10 @@ public class UserController {
         user.setStatus(1);
         //Mybatis-plus自动CRUD的功能，封装好了save方法
         userService.save(user);
-        return R.success("新增员工成功");
+        return R.success("新增用户成功");
     }
     /**
-     * 员工信息分页查询
+     * 用户信息分页查询
      * @param page
      * @param pageSize
      * @param name
@@ -105,7 +105,7 @@ public class UserController {
     }
 
     /**
-     * 根据ID查询员工信息
+     * 根据ID查询用户信息
      * @param id
      * @return
      */

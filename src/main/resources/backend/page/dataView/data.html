@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>View</title>
     <script src="/backend/js/echarts.js"></script>
@@ -17,7 +18,7 @@
     </style>
 </head>
 <body>
-<div class="dashboard-container">
+<div class="dashboard-container"  id="order-app" v-loading="loading">
     <div class="container">
         <div class="tableBar">
             <!-- 为 ECharts 准备一个定义了宽高的 DOM -->
