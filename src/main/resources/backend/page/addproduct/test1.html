@@ -414,11 +414,12 @@
             });
         }
 
+        function goToPreviousPage() {
+            window.location.href = 'addproduct.html';
+        }
 
         function resetGraph() {
-            // 这里可以添加重置图形状态的代码，例如，清空所有图形元素
-            graph.getModel().clear();
-            alert('图形已重置！');
+            window.location.reload();
         }
     </script>
 </head>
@@ -426,10 +427,13 @@
 <div id="graphContainer"></div>
 
 <div id="buttonsContainer">
-    <!-- 保存按钮 -->
-    <button onclick="saveGraph()">保存</button>
-    <!-- 重置按钮 -->
-    <button onclick="resetGraph()">重置</button>
+    <!-- 上一步按钮，白色背景，白色边框 -->
+    <button onclick="goToPreviousPage()" style="background-color: white; color: #606168; border: 1px solid #d8dde3;">上一步</button>
+    <!-- 保存按钮，黄色背景，白色边框 -->
+    <button onclick="saveGraph()" style="background-color: #ffc200; color: black; border: 1px solid #d8dde3;">保存</button>
+    <!-- 重置按钮，保持默认样式 -->
+    <button onclick="resetGraph()" style="background-color: black; color: white; border: 1px solid #d8dde3;">重置</button>
 </div>
+
 </body>
 </html>
