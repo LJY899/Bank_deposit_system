@@ -60,7 +60,7 @@
                     </el-menu-item
                   >
                 </el-submenu>
-                <el-menu-item v-else :index="item.id" @click="menuHandle(item,false)">
+                <el-menu-item v-else :index="item.id" @click="menuHandle(item,false)" v-if="this.user === 'admin' || item.name !== '用户管理'">
                   <i class="iconfont" :class="item.icon"></i>
                   <span slot="title">{{item.name}}</span>
                 </el-menu-item>
@@ -166,6 +166,7 @@
           const userInfo = window.localStorage.getItem('userInfo')
           if (userInfo) {
             this.userInfo = JSON.parse(userInfo)
+            this.user = JSON.parse(localStorage.getItem('userInfo')).username
           }
           this.closeLoading()
         },
