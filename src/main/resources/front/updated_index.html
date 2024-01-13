@@ -48,29 +48,56 @@
     </style>
 </head>
 <body>
-<div class="header">
-    <h1>存款</h1>
+<div id="app">
+    <div class="header">
+        <h1>存款</h1>
+    </div>
+    <ul class="product-list">
+        <li class="product-item" v-for="product in products" :key="product.id">
+            <h3>{{ product.name }}</h3>
+            <span class="annual-interest-rate">年转化率: {{ product.annualInterestRate }}%</span>
+            <p>存期: {{ product.tenure }}</p>
+            <a :href="'page/banking_product_details.html?productId=' + product.id" class="product-link">查看详情</a>
+        </li>
+    </ul>
 </div>
-<ul class="product-list">
-    <!-- Example products -->
-    <li class="product-item">
-        <h3>一年定期存款</h3>
-        <span class="annual-interest-rate">年转化率: 2.05%</span>
-        <p>存期: 12个月</p>
-        <a href="page/banking_product_details.html" class="product-link">查看详情</a>
-    </li>
-    <li class="product-item">
-        <h3>一个月定期存款</h3>
-        <span class="annual-interest-rate">年转化率: 4.00%</span>
-        <p>存期: 1个月</p>
-        <a href="product_detail_2.html" class="product-link">查看详情</a>
-    </li>
-    <li class="product-item">
-        <h3>三个月定期存款</h3>
-        <span class="annual-interest-rate">年转化率: 1.25%e</span>
-        <p>存期: 3个月</p>
-        <a href="product_detail_3.html" class="product-link">查看详情</a>
-    </li>
-</ul>
+
+<!-- 开发环境版本，包含了有帮助的命令行警告 -->
+<script src="../backend/plugins/vue/vue.js"></script>
+<!-- 引入组件库 -->
+<script src="../backend/plugins/element-ui/index.js"></script>
+<!-- 引入vant样式 -->
+<script src="./js/vant.min.js"></script>
+<!-- 引入axios -->
+<script src="../backend/plugins/axios/axios.min.js"></script>
+<script src="./js/request.js"></script>
+<script src="./js/common.js"></script>
+<script src="./api/main.js"></script>
+<script src="/front/api/product.js"></script>
+
+<script>
+    new Vue({
+        el: '#app',
+        data() {
+            return {
+                products: []
+            };
+        },
+        created() {
+            this.fetchProducts();
+        },
+        methods: {
+            fetchProducts() {
+                queryproductList({})
+                    .then(response => {
+                        this.products = response.data;
+                    })
+                    .catch(error => {
+                        console.error('Error fetching the products:', error);
+                    });
+            }
+        }
+    });
+</script>
 </body>
 </html>
