@@ -4,71 +4,101 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>View</title>
+    <title>销售统计视图</title>
     <script src="/backend/js/echarts.js"></script>
     <!-- 引入样式 -->
     <link rel="stylesheet" href="../../plugins/element-ui/index.css" />
     <link rel="stylesheet" href="../../styles/common.css" />
     <link rel="stylesheet" href="../../styles/page.css" />
     <style>
-        #member-app  .notAdmin::after{
+        #member-app .notAdmin::after {
             border: 0 !important;
-
         }
     </style>
 </head>
 <body>
-<div class="dashboard-container"  id="order-app" v-loading="loading">
+<div class="dashboard-container" id="order-app">
     <div class="container">
         <div class="tableBar">
-            <!-- 为 ECharts 准备一个定义了宽高的 DOM -->
             <div id="main" style="width: 800px;height:600px;"></div>
-            <script type="text/javascript">
-                var myChart = echarts.init(document.getElementById('main'));
-                var option;
-
-                option = {
-                    legend: {
-                        top: 'bottom'
-                    },
-                    title:{
-                        text: '销售统计',
-                        left: 'center'
-                    },
-                    toolbox: {
-                        show: true,
-                        feature: {
-                            mark: { show: true },
-                            dataView: { show: true, readOnly: false },
-                            restore: { show: true },
-                            saveAsImage: { show: true }
-                        }
-                    },
-                    series: [
-                        {
-                            name: '销售额统计',
-                            type: 'pie',
-                            radius: [50, 250],
-                            center: ['50%', '50%'],
-                            roseType: 'area',
-                            itemStyle: {
-                                borderRadius: 8
-                            },
-                            data: [
-                                { value: 40, name: '产品 1' },
-                                { value: 38, name: '产品 2' },
-                                { value: 32, name: '产品 3' },
-                                { value: 30, name: '产品 4' },
-                                { value: 28, name: '产品 5' },
-                                { value: 26, name: '产品 6' },
-                            ]
-                        }
-                    ]
-                };
-                option && myChart.setOption(option);
-            </script>
         </div>
     </div>
 </div>
+<!-- 开发环境版本，包含了有帮助的命令行警告 -->
+<script src="../../plugins/vue/vue.js"></script>
+<!-- 引入组件库 -->
+<script src="../../plugins/element-ui/index.js"></script>
+<!-- 引入axios -->
+<script src="../../plugins/axios/axios.min.js"></script>
+<script src="../../js/request.js"></script>
+<script src="../../js/validate.js"></script>
+<script src="../../api/login.js"></script>
+<script type="text/javascript">
+    var myChart = echarts.init(document.getElementById('main'));
+    var option = {
+        legend: {
+            top: 'bottom'
+        },
+        title: {
+            text: '销售统计',
+            left: 'center'
+        },
+        tooltip: {
+            trigger: 'item',
+            formatter: '{a} <br/>{b} : {c} ({d}%)'
+        },
+        toolbox: {
+            show: true,
+            feature: {
+                mark: { show: true },
+                dataView: { show: true, readOnly: false },
+                restore: { show: true },
+                saveAsImage: { show: true }
+            }
+        },
+        series: [
+            {
+                name: '销售额统计',
+                type: 'pie',
+                radius: [50, 250],
+                center: ['50%', '50%'],
+                roseType: 'area',
+                itemStyle: {
+                    borderRadius: 8
+                },
+                data: []  // 数据将从后端获取
+            }
+        ]
+    };
+
+    // 使用 $axios 发起 API 调用
+    $axios({
+        url: '/api/sales',
+        method: 'get'
+    }).then(response => {
+        // response 本身就是您需要的数据数组
+        const responseData = response;
+
+        console.log("原始数据:", responseData);
+
+        const formattedData = responseData.map(item => ({
+            value: item.totalAmount,  // 确保这里的属性与后端返回的一致
+            name: '产品 ' + item.productId
+        }));
+
+        console.log("格式化后的数据:", formattedData);
+
+        myChart.setOption({
+            series: [{
+                ...option.series[0],
+                data: formattedData
+            }]
+        });
+    }).catch(error => {
+        console.error('Error fetching data:', error);
+    });
+
+</script>
+
 </body>
 </html>
