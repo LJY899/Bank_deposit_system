@@ -83,15 +83,14 @@
         }
     </style>
     <script type="text/javascript">
+        var graph;
         function main(container) {
             mxConstraintHandler.prototype.pointImage = new mxImage('images/dot.gif', 10, 10);
             mxEvent.disableContextMenu(document.body);
-
-            // Changes some default colors
             mxConstants.HANDLE_FILLCOLOR = '#99ccff';
             mxConstants.HANDLE_STROKECOLOR = '#0088cf';
             mxConstants.VERTEX_SELECTION_COLOR = '#00a8ff';
-            var graph = new mxGraph(container);
+            graph = new mxGraph(container);
             graph.setConnectable(true);
             graph.setPortsEnabled(false);
             graph.setTooltips(true);
@@ -106,25 +105,25 @@
                 // 检查cell的value以确定它是哪一个
                 if (cell != null && cell.value != null) {
                     if (cell.value === '白名单购买控制接口') {
-                        return "白名单购买控制接口说明还没改";
-                    } else if (cell.value === '地域购买控制接口') {
-                        return "地域购买控制接口说明还没改";
+                        return "对于某些敏感或高价值的产品，限制只有经过验证的用户或组织才能购买";
+                    } else if (cell.value === '产品风险判断接口') {
+                        return "对特定产品或服务进行风险评估，筛选推荐购入用户群体。";
                     } else if (cell.value === '用户标签控制接口') {
-                        return "用户标签控制接口说明还没改";
+                        return "为系统管理员或相关授权人员提供管理和分配特定的用户标签";
                     } else if (cell.value === '重复购买控制接口') {
-                        return "重复购买控制接口说明还没改";
+                        return "禁止或限制用户对特定产品或服务的多次购买";
                     } else if (cell.value === '利息计算接口') {
-                        return "利息计算接口说明还没改";
+                        return "预定义计算方法、利率和期限参数，返回准确的利息金额或利息率，进行资金规划和决策";
                     } else if (cell.value === '库存锁定接口') {
-                        return "库存锁定接口说明还没改";
+                        return "暂时锁定特定的库存数量，避免了超卖和库存冲突的风险";
                     } else if (cell.value === '库存释放接口') {
-                        return "库存释放接口说明还没改";
+                        return "释放或取消之前锁定的库存数量，恢复或调整相应的库存";
                     } else if (cell.value === '库存更新接口') {
-                        return "库存更新接口说明还没改";
+                        return "根据特定的业务操作（如销售、退货、补货等）来实时更新库存数量";
                     } else if (cell.value === '日志录入接口') {
-                        return "日志录入接口说明还没改";
+                        return "提供一个标准化的方式，用于应用程序、系统或设备将关键操作、事件或错误信息记录到日志系统中";
                     } else if (cell.value === '证件审查接口') {
-                        return "证件审查接口说明还没改";
+                        return "验证和审查用户提交的身份证件或证明文件的真实性、有效性和合规性";
                     }
                 }
                 // 默认返回
@@ -251,7 +250,7 @@
                 var tool = graph.insertVertex(root, null, '模板', 2, 4, toolW, toolH, 'editable=0;fillColor=#FFFFFF;resizable=0;movable=0;selectable=0;rounded=1;strokeColor=#000000;strokeWidth=2');
                 var titl = graph.insertVertex(root, null, '原子服务', 2, 4, toolW,toolH*0.05,'editable=0;fillColor=#FFFFFF;resizable=0;movable=0;selectable=0;strokeColor=#000000;strokeWidth=2');
                 var v1 = graph.insertVertex(tool, null, '白名单购买控制接口', toolW*0.15, toolH*0.08,toolW*0.7 ,50,'shape=ellipse;editable=0;fillColor=#FFFFFF;resizable=0;selectable=0;strokeColor=#000000;strokeWidth=2');
-                var v2 = graph.insertVertex(tool, null, '地域购买控制接口', toolW*0.15, toolH*0.16,toolW*0.7 ,50,'shape=ellipse;editable=0;fillColor=#FFFFFF;resizable=0;selectable=0;strokeColor=#000000;strokeWidth=2');
+                var v2 = graph.insertVertex(tool, null, '产品风险判断接口', toolW*0.15, toolH*0.16,toolW*0.7 ,50,'shape=ellipse;editable=0;fillColor=#FFFFFF;resizable=0;selectable=0;strokeColor=#000000;strokeWidth=2');
                 var v3 = graph.insertVertex(tool, null, '用户标签控制接口', toolW*0.15, toolH*0.24,toolW*0.7 ,50,'shape=ellipse;editable=0;fillColor=#FFFFFF;resizable=0;selectable=0;strokeColor=#000000;strokeWidth=2');
                 var v4 = graph.insertVertex(tool, null, '重复购买控制接口', toolW*0.15, toolH*0.32,toolW*0.7 ,50,'shape=ellipse;editable=0;fillColor=#FFFFFF;resizable=0;selectable=0;strokeColor=#000000;strokeWidth=2');
                 var v5 = graph.insertVertex(tool, null, '利息计算接口', toolW*0.15, toolH*0.40,toolW*0.7 ,50,'shape=ellipse;editable=0;fillColor=#FFFFFF;resizable=0;selectable=0;strokeColor=#000000;strokeWidth=2');
@@ -356,7 +355,7 @@
                             //   alert('Edit Vertex: ' + cell.value);
                             // });
                         } else if (graph.getModel().isEdge(cell)) { // 检查是否点击的是边
-                            menu.addItem('Delete Edge', null, function() {
+                            menu.addItem('删除', null, function() {
                                 graph.getModel().remove(cell);
                             });
                             menu.addItem('Edit Edge', null, function() {
@@ -414,6 +413,10 @@
             });
         }
         function exportGraphToXML() {
+            var graphName = prompt("请输入图形名称:", "默认名称");
+
+            // 如果用户点击了取消或没有输入名称，则退出函数
+            if (!graphName) return;
             // 获取当前图形的XML表示
             var encoder = new mxCodec();
             var node = encoder.encode(graph.getModel());
@@ -427,17 +430,36 @@
             // 创建一个下载链接
             var link = document.createElement('a');
             link.href = URL.createObjectURL(blob);
-            link.download = 'graph.xml';
-
+            // link.download = 'graph.xml';
+            link.download = graphName + '.xml';
             // 模拟点击链接以触发下载
             link.click();
-        }
-        function goToPreviousPage() {
-            window.location.href = 'addproduct.html';
         }
 
         function resetGraph() {
             window.location.reload();
+        }
+        function handleFileSelect(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const xmlContent = e.target.result;
+                loadGraphFromXML(xmlContent);
+            };
+            reader.readAsText(file);
+        }
+
+        function loadGraphFromXML(xmlContent) {
+            if (!graph) {
+                alert('Graph is not initialized!');
+                return;
+            }
+
+            const doc = mxUtils.parseXml(xmlContent);
+            const codec = new mxCodec(doc);
+            codec.decode(doc.documentElement, graph.getModel());
         }
     </script>
 
@@ -449,12 +471,12 @@
 
 <div id="buttonsContainer">
 
-    <button onclick="exportGraphToXML()">设为模板</button>
-    <!-- 保存按钮，黄色背景，白色边框 -->
+    <input type="file" id="fileInput" style="display: none; color: black; border: 1px solid #d8dde3;" accept=".xml" onchange="handleFileSelect(event)">
+    <button onclick="document.getElementById('fileInput').click()">加载模板</button>
+    <button onclick="exportGraphToXML()" style="background-color: #fd7065; color: black; border: 1px solid #d8dde3;">设为模板</button>
     <button onclick="saveGraph()" style="background-color: #ffc200; color: black; border: 1px solid #d8dde3;">保存</button>
-    <!-- 重置按钮，保持默认样式 -->
     <button onclick="resetGraph()" style="background-color: black; color: white; border: 1px solid #d8dde3;">重置</button>
-</div>
 
+</div>
 </body>
 </html>
