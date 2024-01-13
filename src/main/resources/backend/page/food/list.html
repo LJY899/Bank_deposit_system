@@ -108,14 +108,6 @@
                   type="text"
                   size="small"
                   class="blueBug"
-                  @click="addFoodtype(scope.row.productId)"
-          >
-            修改
-          </el-button>
-          <el-button
-                  type="text"
-                  size="small"
-                  class="blueBug"
                   @click="statusHandle(scope.row)"
           >
             {{ scope.row.productStatus == '已下线' ? '上线' : '下线' }}
