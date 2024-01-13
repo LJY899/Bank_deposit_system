@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>添加银行存款产品</title>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/layui/2.5.6/css/layui.css">
+    <script src="https://cdn.staticfile.org/layui/2.5.6/layui.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+</head>
+<body>
+
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-header">添加银行存款产品信息</div>
+        <div class="layui-card-body" style="padding: 15px;">
+            <form class="layui-form" action="" lay-filter="addProductForm">
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">产品名称</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="name" lay-verify="required" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">产品期限（月）</label>
+                    <div class="layui-input-inline">
+                        <input type="number" name="tenure" lay-verify="required" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">年化利率（%）</label>
+                    <div class="layui-input-inline">
+                        <input type="number" name="annualInterestRate" lay-verify="required" autocomplete="off" class="layui-input" step="0.01">
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">起存金额（元）</label>
+                    <div class="layui-input-inline">
+                        <input type="number" name="minDepositAmount" lay-verify="required" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">单人限额（元）</label>
+                    <div class="layui-input-inline">
+                        <input type="number" name="singleLimitAmount" lay-verify="required" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">单日限额（元）</label>
+                    <div class="layui-input-inline">
+                        <input type="number" name="dailyLimitAmount" lay-verify="required" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">风险等级</label>
+                    <div class="layui-input-block">
+                        <input type="radio" name="riskLevel" value="低风险" title="低风险" lay-verify="required">
+                        <input type="radio" name="riskLevel" value="中风险" title="中风险" lay-verify="required">
+                        <input type="radio" name="riskLevel" value="高风险" title="高风险" lay-verify="required">
+                    </div>
+                </div>
+                <!-- 结息方式下拉框 -->
+                <div class="layui-form-item">
+                    <label class="layui-form-label">结息方式</label>
+                    <div class="layui-input-inline" style="width: 200px;">
+                        <select name="interestPayment" lay-verify="required">
+                            <option value="">请选择结息方式</option>
+                            <option value="月结">月结</option>
+                            <option value="季度结">季度结</option>
+                            <option value="年结">年结</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="layui-form-item layui-layout-admin">
+                    <div class="layui-input-block">
+                        <div class="layui-footer" style="left: 0;">
+                            <button type="button" class="layui-btn" onclick="openCreateProduct()" style="background-color: white; color: #606168; border: 1px solid #d8dde3;">部署</button>
+                            <button class="layui-btn" lay-submit="" lay-filter="addProduct" style="background-color: #ffc200; color: black; border-radius: 3px;border: 1px solid #d8dde3;">提交</button>
+                            <button type="reset" class="layui-btn layui-btn-primary" style="background-color: black; color: white; border-radius: 3px; border: 1px solid #d8dde3;">重置</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.staticfile.org/layui/2.5.6/layui.js"></script>
+<script>
+    window.openCreateProduct = function () {
+        layer.open({
+            type: 2,
+            title: '服务编排',
+            content: 'test1.html',  // 更改为您希望打开的页面URL
+            area: ['1000px', '800px'],
+        });
+    };
+    layui.use(['form'], function(){
+        var form = layui.form;
+
+        form.render(null, 'addProductForm');
+
+        form.on('submit(addProduct)', function(data){
+            // 获取当前日期作为起息日
+            var currentDate = new Date();
+            var startDate = currentDate.toISOString().split('T')[0];  // 格式化为 'YYYY-MM-DD'
+
+            // 获取产品期限
+            var tenure = parseInt(data.field.tenure);  // 假设tenure是整数
+
+            // 计算到期日
+            var maturityDate = new Date(currentDate);
+            maturityDate.setMonth(currentDate.getMonth() + tenure);
+            maturityDate = maturityDate.toISOString().split('T')[0];  // 格式化为 'YYYY-MM-DD'
+
+            var productData = {
+                name: data.field.name,
+                startDate: startDate,
+                tenure: tenure,
+                annualInterestRate: data.field.annualInterestRate,
+                minDepositAmount: data.field.minDepositAmount,
+                singleLimitAmount: data.field.singleLimitAmount,
+                dailyLimitAmount: data.field.dailyLimitAmount,
+                riskLevel: data.field.riskLevel,
+                interestPayment: data.field.interestPayment,
+                maturityDate: maturityDate,
+                productStatus: "在售"  // 默认设置为"在售"
+            };
+
+            $.ajax({
+                url: '/product',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(productData),
+                success: function(response) {
+                    alert('提交成功！');
+                },
+                error: function(error) {
+                    alert('提交失败，请稍后重试！');
+                }
+            });
+
+            return false;
+        });
+
+    });
+</script>
+
+</body>
+</html>
