@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <title>添加银行存款产品</title>
-
     <link rel="stylesheet" href="https://cdn.staticfile.org/layui/2.5.6/css/layui.css">
     <script src="https://cdn.staticfile.org/layui/2.5.6/layui.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -35,7 +34,7 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">年化利率（%）</label>
                     <div class="layui-input-inline">
-                        <input type="number" name="annualInterestRate" lay-verify="required" autocomplete="off" class="layui-input">
+                        <input type="number" name="annualInterestRate" lay-verify="required" autocomplete="off" class="layui-input" step="0.01">
                     </div>
                 </div>
 
@@ -90,16 +89,6 @@
                         </div>
                     </div>
                 </div>
-                <div id="customModal" style="display: none;">
-                    <div class="layui-card">
-                        <div class="layui-card-header">自定义窗口标题</div>
-                        <div class="layui-card-body" style="padding: 15px;">
-                            <!-- 在这里添加您的自定义内容 -->
-                            <p>这是一个自定义窗口。</p>
-                            <button id="closeModal" class="layui-btn layui-btn-primary">关闭</button>
-                        </div>
-                    </div>
-                </div>
             </form>
         </div>
     </div>
@@ -110,12 +99,13 @@
     window.openCreateProduct = function () {
         layer.open({
             type: 2,
-            title: '创建产品',
+            title: '服务编排',
             content: 'test1.html',  // 更改为您希望打开的页面URL
             area: ['1000px', '800px'],
         });
     };
     layui.use(['form'], function(){
+        var form = layui.form;
 
         form.render(null, 'addProductForm');
 
@@ -152,7 +142,7 @@
                 contentType: 'application/json',
                 data: JSON.stringify(productData),
                 success: function(response) {
-                    window.location.href = 'test1.html';
+                    alert('提交成功！');
                 },
                 error: function(error) {
                     alert('提交失败，请稍后重试！');
