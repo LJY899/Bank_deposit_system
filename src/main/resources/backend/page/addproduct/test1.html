@@ -131,7 +131,8 @@
             }
             new mxRubberband(graph);
             var edgeStyle = graph.getStylesheet().getDefaultEdgeStyle();
-            edgeStyle[mxConstants.STYLE_STROKECOLOR] = '#000000'; // 设置边的颜色为红色
+            edgeStyle[mxConstants.STYLE_STROKECOLOR] = '#000000'; // 设置边的颜色为黑色
+            edgeStyle[mxConstants.STYLE_FONTCOLOR] = '#000000';
             edgeStyle[mxConstants.STYLE_STROKEWIDTH] = '2';       // 设置边的宽度
             edgeStyle[mxConstants.STYLE_EDGE] = mxEdgeStyle.OrthConnector;
             var root = graph.getDefaultParent();
@@ -355,13 +356,26 @@
                             //   alert('Edit Vertex: ' + cell.value);
                             // });
                         } else if (graph.getModel().isEdge(cell)) { // 检查是否点击的是边
+                            const currentStyle = graph.getModel().getStyle(cell);
                             menu.addItem('删除', null, function() {
                                 graph.getModel().remove(cell);
                             });
-                            menu.addItem('Edit Edge', null, function() {
-                                // 在此处添加编辑边的操作，例如改变边的样式或属性
-                                alert('Edit Edge connecting ' + cell.source.value + ' and ' + cell.target.value);
+                            menu.addItem('直线/折线', null, function() {
+                                if (currentStyle.includes('edgeStyle=straight;')) {
+                                    graph.getModel().setStyle(cell, currentStyle.replace('edgeStyle=straight;', '')); // 移除直线样式
+                                } else {
+                                    graph.getModel().setStyle(cell, 'edgeStyle=straight;' + currentStyle); // 添加直线样式
+                                }
                             });
+                            menu.addItem('虚/实', null, function() {
+                                if (currentStyle.includes('dashed=1;')) {
+                                    graph.getModel().setStyle(cell, currentStyle.replace('dashed=1;', '')); // 移除虚线样式
+                                } else {
+                                    graph.getModel().setStyle(cell, currentStyle + 'dashed=1;'); // 添加虚线样式
+                                }
+                            });
+
+
                         }
                     } else { // 如果点击的是空白区域，你可以添加一些默认的菜单项
                         menu.addItem('Default Option 1', null, function() {
