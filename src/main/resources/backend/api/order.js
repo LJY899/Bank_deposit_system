@@ -23,3 +23,15 @@ const editOrderDetail = (params) => {
     data: { ...params }
   })
 }
+
+const submitOrder = (orderData) => {
+  return $axios({
+    url: '/order/submit',
+    method: 'post',
+    data: orderData,
+    headers: {
+      'Content-Type': 'application/json',
+      // 如果有其他头部，也可以在这里添加
+    }
+  });
+}

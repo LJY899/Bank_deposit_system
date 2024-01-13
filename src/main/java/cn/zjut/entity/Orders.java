@@ -1,8 +1,13 @@
 package cn.zjut.entity;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;//实现setter和getter和tostring方法
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 /**
@@ -14,7 +19,7 @@ public class Orders implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-
+    @TableId(type= IdType.AUTO)
     private Long id;
 
     //订单号
@@ -30,6 +35,7 @@ public class Orders implements Serializable {
     private BigDecimal amount;
 
     //下单时间
+    @TableField(fill = FieldFill.INSERT)
     private LocalDateTime time;
 
     //订单状态 1未到期 2已到期

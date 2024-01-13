@@ -17,24 +17,22 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
-
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 @Service
 @Slf4j
 public class OrderServiceImpl extends ServiceImpl<OrderMapper, Orders> implements OrderService {
+    @Autowired
+    private OrderMapper orderMapper;
     /**
      * 用户下单
      * @param orders
      */
     @Transactional
     public void submit(Orders orders){
-        //获得当前用户id
-        //Long userId = BaseContext.getCurrentId();
-        //查询当前用户选择的产品id
-        //LambdaQueryWrapper wrapper
-        //向订单表插入数据，一条数据
-
-        //向订单明细表？
-
-        //
+        // 调用订单数据保存方法
+        orderMapper.insert(orders);
     }
+
+
 }

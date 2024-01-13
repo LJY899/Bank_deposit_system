@@ -6,4 +6,5 @@ import org.mockito.internal.matchers.Or;
 
 public interface OrderService extends IService<Orders> {
     public void submit(Orders orders);
+
 }

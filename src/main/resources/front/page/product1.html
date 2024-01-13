@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0,user-scalable=no,minimal-ui">
-    <title>菩提阁</title>
+    <title>银行产品</title>
     <link rel="icon" href="./../images/favico.ico">
     <!-- 不同屏幕尺寸根字体设置 -->
     <script src="./../js/base.js"></script>
@@ -37,6 +37,11 @@
             border-radius: 8px;
             text-align: center;
             margin-bottom: 20px;
+        }
+
+        .custom-notification {
+            color: red; // 你想要的文本颜色
+        background-color: #fff; // 你想要的背景颜色
         }
 
         .divTitle {
@@ -250,6 +255,7 @@
 <script src="../../backend/plugins/axios/axios.min.js"></script>
 <script src="./../js/request.js"></script>
 <script src="./../api/product.js"></script>
+<script src="./../api/order.js"></script>
 <script>
     new Vue({
         el:"#order",
@@ -272,6 +278,8 @@
                 password: '',
                 paymentVisible: false,  // 是否显示支付界面
                 paymentPassword: '',    // 支付密码
+                purchaseSuccessTime: null, // 添加这一行用于存储购买成功时间
+                orderData: {}, // 添加这一行用于存储订单数据
             }
         },
         computed:{},
@@ -280,6 +288,36 @@
         },
         mounted(){},
         methods:{
+            convertDateToLocalDateTime(date) {
+
+                return date.toISOString(); // 返回符合 ISO 标准的字符串
+            },
+
+            async submitOrder(orderData) {
+                const dateToString = (key, value) => {
+                    if (value instanceof Date) {
+                        // 将日期对象转换为字符串
+                        return value.toISOString();
+                    }
+                    return value;
+                };
+
+                try {
+
+                    const response = await $axios({
+                        url: '/order/submit',
+                        method: 'post',
+                        data: JSON.stringify(orderData, dateToString),
+                        headers: {
+                            'Content-Type': 'application/json',
+                        }
+                    });
+
+                    console.log('订单数据发送成功', response);
+                } catch (error) {
+                    console.error('发送订单数据时出错', error);
+                }
+            },
             // 添加此方法用于输出订单项数据
             logProductDetails(item) {
                 console.log('Clicked product details:', item);
@@ -295,11 +333,39 @@
                 this.purchaseVisible = true;
             },
             // 购买成功后的逻辑
+            // 购买成功后的逻辑
             purchaseSuccess() {
                 // 模拟购买成功后的逻辑
                 this.purchaseVisible = false;
                 this.passwordVisible = false;
+                this.purchaseSuccessTime = new Date();
+
+
+                // 将购买成功的数据添加到订单数据
+                this.orderData = {
+                    productId: this.selectedProduct.productId,
+                    userPhone: '15267123456',
+                    amount: this.purchaseAmount,
+                    status: 1,
+                    // 其他订单相关数据...
+                };
+                // 调用发送订单数据的方法
+                this.sendOrderData();
             },
+
+
+            async sendOrderData() {
+                try {
+                    console.log('尝试发送订单数据:', JSON.stringify(this.orderData));
+
+                    const response = await this.submitOrder(this.orderData);
+
+                    console.log('订单数据发送成功', response);
+                } catch (error) {
+                    console.error('发送订单数据时出错', error);
+                }
+            },
+
 
 
             // 显示支付界面
@@ -336,6 +402,8 @@
                 // 假设正确支付密码为 '1234'
                 const correctPaymentPassword = '1234';
 
+                console.log('Entered confirmPayment method'); // 添加这行
+
                 if (this.paymentPassword === correctPaymentPassword) {
                     // 支付密码正确，购买成功
                     this.paymentVisible = false;
@@ -343,8 +411,10 @@
                         title: '成功',
                         message: '支付成功，购买成功！',
                         type: 'success',
-                        duration: 3000,})
-
+                        duration: 3000,
+                    });
+                    console.log('订单数据:', this.orderData);
+                    this.purchaseSuccess();
                 } else {
                     // 支付密码错误，弹出提示
                     this.$notify({
@@ -352,10 +422,12 @@
                         message: '支付密码错误，请重新输入！',
                         type: 'error',
                         duration: 3000,
+                        customClass: 'custom-notification', // 添加这行
                     });
-
+                    console.log('Entered password error branch'); // 添加这行
                 }
             },
+
             goBack(){
                 const url = document.referrer
                 //表示是从订单页面跳转过来的
