@@ -90,7 +90,7 @@
       ></el-table-column>
       <el-table-column label="状态">
         <template slot-scope="scope">
-          <span style="margin-right: 10px;">{{ scope.row.productStatus == '上线' ? '上线' : '已下线' }}</span>
+          <span style="margin-right: 10px;">{{ scope.row.productStatus == '在售' ? '在售' : '已下线' }}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -203,8 +203,6 @@
         }
       },
 
-
-
       // 删除
       deleteHandle (type, productId) {
         console.log('type:', type);
@@ -247,7 +245,7 @@
           params.productStatus = row
         } else {
           params.productId= row.productId
-          params.productStatus = row.productStatus === "上线" ? "已下线" : "上线";
+          params.productStatus = row.productStatus === "在售" ? "在售" : "已下线";
 
         }
         this.productStatus = params
