@@ -1,25 +1,16 @@
-// 查询列表接口
-const getproductPage = (params) => {
+//查询所有订单
+function productListApi() {
     return $axios({
-        url: '/product/page',
-        method: 'get',
-        params
+        'url': '/product/list',
+        'method': 'get',
     })
 }
 
-// 查询详情
-const queryproductById = (productId) => {
+//分页查询订单
+function productPagingApi(data) {
     return $axios({
-        url: `/product/${productId}`,
-        method: 'get'
-    })
-}
-
-// 查产品列表的接口
-const queryproductList = (params) => {
-    return $axios({
-        url: '/product/list',
-        method: 'get',
-        params
+        'url': '/product/page',
+        'method': 'get',
+        params:{...data}
     })
 }

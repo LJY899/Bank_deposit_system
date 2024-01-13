@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0,user-scalable=no,minimal-ui">
+    <title>银行产品</title>
+    <link rel="icon" href="./../images/favico.ico">
+    <!-- 不同屏幕尺寸根字体设置 -->
+    <script src="./../js/base.js"></script>
+    <!-- element-ui的样式 -->
+    <link rel="stylesheet" href="../../backend/plugins/element-ui/index.css" />
+    <!-- 引入样式  -->
+    <link rel="stylesheet" href="../styles/index.css" />
+    <!-- 引入vant样式 -->
+    <link rel="stylesheet" href="../styles/vant.min.css"/>
+    <!-- 本页面内容的样式 -->
+    <link rel="stylesheet" href="./../styles/order.css" />
+    <!-- 您的自定义样式 -->
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        .app {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .divHead {
+            background-color: #409eff;
+            color: #fff;
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .custom-notification {
+            color: red; // 你想要的文本颜色
+        background-color: #fff; // 你想要的背景颜色
+        }
+
+        .divTitle {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .divBody {
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .productList {
+            border: 1px solid #eee;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .productList:hover {
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .info-label {
+            font-weight: bold;
+            margin-right: 5px;
+            color: #409eff;
+        }
+
+        .action-buttons {
+            margin-top: 15px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .view-details,
+        .purchase {
+            background-color: #409eff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .view-details:hover,
+        .purchase:hover {
+            background-color: #66b1ff;
+        }
+
+        .dialog-content {
+            padding: 20px;
+            text-align: left;
+        }
+
+        .dialog-footer {
+            text-align: right;
+            margin-top: 20px;
+        }
+
+        .purchase-page {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .purchase-info {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .purchase-input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        .purchase-btn {
+            background-color: #409eff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .purchase-btn:hover {
+            background-color: #66b1ff;
+        }
+
+        .password-modal {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .password-input {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        .password-confirm-btn {
+            background-color: #409eff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .password-confirm-btn:hover {
+            background-color: #66b1ff;
+        }
+    </style>
+</head>
+<body>
+<div id="order" class="app">
+    <div class="divHead">
+        <div class="divTitle">
+            <i class="el-icon-arrow-left" @click="goBack"></i>银行产品
+        </div>
+    </div>
+    <div class="divBody" v-if="productList.length > 0">
+        <van-list>
+            <van-cell v-for="(product, index) in productList" :key="index" class="item">
+                <div class="productList">
+                    <p><span class="info-label">名称：</span>{{ product.name }}</p>
+                    <p><span class="info-label">存期：</span>{{ product.tenure }}个月</p>
+                    <p><span class="info-label">年化利润：</span>{{ product.annualInterestRate }}%</p>
+                    <p><span class="info-label">风险等级：</span>{{ product.riskLevel }}</p>
+                    <div class="action-buttons">
+                        <button class="view-details" @click="showProductDetails(product)">查看详情</button>
+                        <button class="purchase" @click="purchaseProduct(product)">购买</button>
+                    </div>
+                </div>
+            </van-cell>
+        </van-list>
+    </div>
+
+    <!-- 弹窗部分 -->
+    <el-dialog title="产品详情" :visible.sync="dialogVisible" width="50%">
+        <div>
+            <p><span class="info-label">名称：</span>{{ selectedProduct.name }}</p>
+            <p><span class="info-label">存期：</span>{{ selectedProduct.tenure }}个月</p>
+            <p><span class="info-label">年化利润：</span>{{ selectedProduct.annualInterestRate }}%</p>
+            <p><span class="info-label">风险等级：</span>{{ selectedProduct.riskLevel }}</p>
+            <p><span class="info-label">起存金额：</span>{{ selectedProduct.minDepositAmount }}</p>
+            <p><span class="info-label">单人限额：</span>{{ selectedProduct.singleLimitAmount }}</p>
+            <p><span class="info-label">单日限额：</span>{{ selectedProduct.dailyLimitAmount}}</p>
+            <p><span class="info-label">起息日：</span>{{ selectedProduct.startDate}}</p>
+            <p><span class="info-label">到期日：</span>{{ selectedProduct.maturityDate}}</p>
+            <p><span class="info-label">结息方式：</span>{{ selectedProduct.interestPayment}}</p>
+        </div>
+        <div slot="footer" class="dialog-footer">
+            <el-button @click="dialogVisible = false">关闭</el-button>
+        </div>
+    </el-dialog>
+
+    <!-- 购买页面 -->
+    <el-dialog :visible.sync="purchaseVisible" title="购买产品" width="50%">
+        <div class="purchase-page">
+            <div class="purchase-info">
+                <p><span class="info-label">用户卡号：</span>{{ userCardNumber }}</p>
+                <p><span class="info-label">余额：</span>{{ userBalance }}</p>
+            </div>
+            <input class="purchase-input" v-model="purchaseAmount" placeholder="请输入存入金额" />
+            <button class="purchase-btn" @click="showPaymentModal">确认购买</button>
+        </div>
+    </el-dialog>
+
+    <!-- 密码验证弹窗 -->
+    <el-dialog :visible.sync="passwordVisible" title="密码验证" width="50%">
+        <div class="password-modal">
+            <input class="password-input" v-model="password" placeholder="请输入支付密码" />
+            <button class="password-confirm-btn" @click="confirmPassword">确认</button>
+        </div>
+    </el-dialog>
+
+    <!-- 支付界面 -->
+    <el-dialog :visible.sync="paymentVisible" title="支付确认" width="50%">
+        <div class="payment-modal">
+            <input class="payment-input" v-model="paymentPassword" placeholder="请输入支付密码" />
+            <button class="payment-confirm-btn" @click="confirmPayment">确认支付</button>
+        </div>
+    </el-dialog>
+</div>
+
+<!-- 开发环境版本，包含了有帮助的命令行警告 -->
+<script src="../../backend/plugins/vue/vue.js"></script>
+<!-- 引入组件库 -->
+<script src="../../backend/plugins/element-ui/index.js"></script>
+<!-- 引入vant组件 -->
+<script src="./../js/vant.min.js"></script>
+<!-- 引入axios -->
+<script src="../../backend/plugins/axios/axios.min.js"></script>
+<script src="./../js/request.js"></script>
+<script src="./../api/product.js"></script>
+<script>
+    new Vue({
+        el:"#order",
+        data(){
+            return {
+                paging:{
+                    page:1,
+                    pageSize:10
+                },
+                productList:[],
+                loading:false,
+                finished:false,
+                dialogVisible: false,
+                selectedProduct: {},
+                purchaseVisible: false,
+                userCardNumber: '1234 **** **** 5678',
+                userBalance: '$10,000.00',
+                purchaseAmount: '',
+                passwordVisible: false,
+                password: '',
+                paymentVisible: false,  // 是否显示支付界面
+                paymentPassword: '',    // 支付密码
+            }
+        },
+        computed:{},
+        created(){
+            this.initData()
+        },
+        mounted(){},
+        methods:{
+            // 添加此方法用于输出订单项数据
+            logProductDetails(item) {
+                console.log('Clicked product details:', item);
+            },
+            // 添加查看详情按钮的方法
+            showProductDetails(item) {
+                this.selectedProduct = item;
+                this.dialogVisible = true;
+            },
+            // 购买产品
+            purchaseProduct(product) {
+                this.selectedProduct = product;
+                this.purchaseVisible = true;
+            },
+            // 购买成功后的逻辑
+            purchaseSuccess() {
+                // 模拟购买成功后的逻辑
+                this.purchaseVisible = false;
+                this.passwordVisible = false;
+            },
+
+
+            // 显示支付界面
+            showPaymentModal() {
+                this.purchaseVisible = false;
+                this.paymentVisible = true;
+            },
+
+            // 确认购买
+            confirmPurchase() {
+                // 需要处理购买逻辑，比如发送请求
+                // 在这里先模拟购买成功
+                // 模拟延迟1秒，可根据实际情况调整
+                setTimeout(() => {
+                    this.purchaseSuccess();
+                }, 1000);
+            },
+
+            // 密码确认
+            confirmPassword() {
+                // 需要验证密码，比如发送请求进行验证
+                // 在这里先模拟验证成功
+                this.passwordVisible = false;
+                this.$notify({
+                    title: '成功',
+                    message: '密码正确，购买成功！',
+                    type: 'success',
+                    duration: 3000,
+                });
+            },
+
+            // 确认支付
+            confirmPayment() {
+                // 假设正确支付密码为 '1234'
+                const correctPaymentPassword = '1234';
+
+                console.log('Entered confirmPayment method'); // 添加这行
+
+                if (this.paymentPassword === correctPaymentPassword) {
+                    // 支付密码正确，购买成功
+                    this.paymentVisible = false;
+                    this.$notify({
+                        title: '成功',
+                        message: '支付成功，购买成功！',
+                        type: 'success',
+                        duration: 3000,
+                    });
+                } else {
+                    // 支付密码错误，弹出提示
+                    this.$notify({
+                        title: '错误',
+                        message: '支付密码错误，请重新输入！',
+                        type: 'error',
+                        duration: 3000,
+                        customClass: 'custom-notification', // 添加这行
+                    });
+                    console.log('Entered password error branch'); // 添加这行
+                }
+            },
+
+            goBack(){
+                const url = document.referrer
+                //表示是从订单页面跳转过来的
+                if(url.includes('success')){
+                    window.requestAnimationFrame(()=>{
+                        window.location.href= '/front/index.html'
+                    })
+                }else{
+                    history.go(-1)
+                }
+            },
+            initData(){
+                this.getList()
+            },
+            async getList() {
+                const res = await productPagingApi(this.paging);
+                console.log('API response:', res);
+
+                if (res.code === 1) {
+                    // 打印数据结构
+                    console.log('Records structure:', res.data.records);
+
+                    // 直接替换数据
+                    this.productList = res.data.records;
+                } else {
+                    this.$notify({ type: 'warning', message: res.msg });
+                }
+            },
+        }
+    })
+</script>
+</body>
+</html>
