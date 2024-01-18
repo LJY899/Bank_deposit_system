@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>显示用户信息</title>
+</head>
+
+<body>
+<div id="app">
+    <h1>用户信息展示页面</h1>
+    <ul>
+        <li v-for="(value, key) in userInfo" :key="key">
+            <strong>{{ key }}:</strong> {{ value }}
+        </li>
+    </ul>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+<script>
+    new Vue({
+        el: '#app',
+        data() {
+            return {
+                userInfo: {}
+            };
+        },
+        mounted() {
+            // 从 localStorage 中获取保存的用户信息
+            const storedUserInfo = localStorage.getItem('userInfo');
+
+            // 检查是否存在保存的用户信息
+            if (storedUserInfo) {
+                // 解析 JSON 字符串并存储到 userInfo 数据中
+                this.userInfo = JSON.parse(storedUserInfo);
+            } else {
+                alert('未找到用户信息，请先登录。');
+                // 如果未找到用户信息，可以跳转到登录页面或执行其他操作
+                // window.location.href = '/login.html';
+            }
+        }
+    });
+</script>
+</body>
+
+</html>
