@@ -40,8 +40,8 @@
         }
 
         .custom-notification {
-            color: red; // 你想要的文本颜色
-        background-color: #fff; // 你想要的背景颜色
+            color: red;
+        background-color: #fff;
         }
 
         .divTitle {
@@ -278,8 +278,8 @@
                 password: '',
                 paymentVisible: false,  // 是否显示支付界面
                 paymentPassword: '',    // 支付密码
-                purchaseSuccessTime: null, // 添加这一行用于存储购买成功时间
-                orderData: {}, // 添加这一行用于存储订单数据
+                purchaseSuccessTime: null, // 存储购买成功时间
+                orderData: {}, // 存储订单数据
             }
         },
         computed:{},
@@ -296,7 +296,7 @@
             },
 
             getPhoneNumber() {
-                // 获取URL参数的函数
+                // 获取URL参数
                 function getParameterByName(name, url) {
                     name = name.replace(/[\[\]]/g, "\\$&");
                     var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
@@ -453,9 +453,6 @@
 
             // 确认购买
             confirmPurchase() {
-                // 需要处理购买逻辑，比如发送请求
-                // 在这里先模拟购买成功
-                // 模拟延迟1秒，可根据实际情况调整
                 setTimeout(() => {
                     this.purchaseSuccess();
                 }, 1000);

@@ -13,10 +13,8 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api")
 public class phoneController {
 
-
-
     @Autowired
-    private ProductService productService; // 你的产品服务类，类似于你之前的Product模块
+    private ProductService productService;
 
     @GetMapping("/{productId}")
     public R<Product> get(@PathVariable Long productId ) {
