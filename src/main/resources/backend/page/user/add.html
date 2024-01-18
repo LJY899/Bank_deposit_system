@@ -136,7 +136,7 @@
               if (String(res.code) === '1') {
                 console.log(res.data)
                 this.ruleForm = res.data
-                this.ruleForm.sex = res.data.sex === '0' ? '女' : '男'
+                this.ruleForm.sex = res.data.sex === '女' ? '女' : '男'
               } else {
                 this.$message.error(res.msg || '操作失败')
               }
@@ -148,7 +148,7 @@
                 if (this.actionType === 'add') {
                   const params = {
                     ...this.ruleForm,
-                    sex: this.ruleForm.sex === '女' ? '0' : '1'
+                    sex: this.ruleForm.sex === '女' ? '女' : '男'
                   }
                   addUser(params).then(res => {
                     if (res.code === 1) {
@@ -172,7 +172,7 @@
                 } else {
                   const params = {
                     ...this.ruleForm,
-                    sex: this.ruleForm.sex === '女' ? '0' : '1'
+                    sex: this.ruleForm.sex === '女' ? '女' : '男'
                   }
                   editUser(params).then(res => {
                     if (res.code === 1) {

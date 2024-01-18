@@ -99,7 +99,6 @@ public class UserController {
     @PutMapping
     public R<String> update(HttpServletRequest request, @RequestBody User user){
         log.info(user.toString());
-
         userService.updateById(user);
         return R.success("用户信息修改成功");
     }

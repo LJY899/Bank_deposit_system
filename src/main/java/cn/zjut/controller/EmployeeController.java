@@ -50,7 +50,7 @@ public class EmployeeController {
             //密码是否正确
         }else if (!emp.getPassword().equals(password)){
             return R.error("账户密码错误");
-            //员工账户状态是否正常，1：状态正常，0：封禁EmployeeController
+            //员工账户状态是否正常，1：状态正常，0：封禁
         }else if (emp.getStatus()!=1){
             return R.error("当前账户正在封禁");
             //状态正常允许登陆
@@ -58,7 +58,6 @@ public class EmployeeController {
             //登陆成功，将用户id存入Session并返回登录成功结果
             log.info("登陆成功，账户存入session");
             request.getSession().setAttribute("employee",emp.getId());
-            //组长你写错了employee->emp
             return R.success(emp);
         }
     }
@@ -133,27 +132,13 @@ public class EmployeeController {
      * @return
      */
     @PutMapping
-    @Transactional
     public R<String> update(HttpServletRequest request, @RequestBody Employee employee) {
         log.info(employee.toString());
-
-        try {
-            Long empId = (Long) request.getSession().getAttribute("employee");
-            employee.setId(empId);  // 设置正确的员工ID
-            employee.setUpdateTime(LocalDateTime.now());
-            employee.setUpdateUser(empId);
-            employee.setPassword(DigestUtils.md5DigestAsHex(employee.getPassword().getBytes()));
-            employee.setCreateTime(LocalDateTime.now());
-            employee.setUpdateTime(LocalDateTime.now());
-            empId = (Long) request.getSession().getAttribute("employee");
-            employee.setCreateUser(empId);
-            employee.setUpdateUser(empId);
-            employeeService.updateById(employee);
-            return R.success("员工信息修改成功");
-        } catch (Exception e) {
-            log.error("员工信息修改失败", e);
-            return R.error("员工信息修改失败，请稍后重试");
-        }
+        Long empId=(Long)request.getSession().getAttribute("employee");
+        employee.setUpdateTime(LocalDateTime.now());
+        employee.setUpdateUser(empId);
+        employeeService.updateById(employee);
+        return R.success("员工信息修改成功");
     }
 
     /**
