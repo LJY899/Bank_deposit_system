@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.DigestUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -132,14 +133,27 @@ public class EmployeeController {
      * @return
      */
     @PutMapping
-    public R<String> update(HttpServletRequest request,@RequestBody Employee employee){
+    @Transactional
+    public R<String> update(HttpServletRequest request, @RequestBody Employee employee) {
         log.info(employee.toString());
 
-        Long empId=(Long)request.getSession().getAttribute("employee");
-        employee.setUpdateTime(LocalDateTime.now());
-        employee.setUpdateUser(empId);
-        employeeService.updateById(employee);
-        return R.success("员工信息修改成功");
+        try {
+            Long empId = (Long) request.getSession().getAttribute("employee");
+            employee.setId(empId);  // 设置正确的员工ID
+            employee.setUpdateTime(LocalDateTime.now());
+            employee.setUpdateUser(empId);
+            employee.setPassword(DigestUtils.md5DigestAsHex(employee.getPassword().getBytes()));
+            employee.setCreateTime(LocalDateTime.now());
+            employee.setUpdateTime(LocalDateTime.now());
+            empId = (Long) request.getSession().getAttribute("employee");
+            employee.setCreateUser(empId);
+            employee.setUpdateUser(empId);
+            employeeService.updateById(employee);
+            return R.success("员工信息修改成功");
+        } catch (Exception e) {
+            log.error("员工信息修改失败", e);
+            return R.error("员工信息修改失败，请稍后重试");
+        }
     }
 
     /**
