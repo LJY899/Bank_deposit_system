@@ -58,7 +58,7 @@ public class EmployeeController {
             log.info("登陆成功，账户存入session");
             request.getSession().setAttribute("employee",emp.getId());
             //组长你写错了employee->emp
-            return R.success(employee);
+            return R.success(emp);
         }
     }
 
