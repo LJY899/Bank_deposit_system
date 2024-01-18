@@ -62,6 +62,8 @@
                 async btnLogin() {
                     if (this.form.phone && this.form.password) {
                         this.loading = true
+                        // 将手机号作为URL参数传递
+                        window.location.href = `/front/page/product.html?phone=${this.form.phone}`;
                         const res = await loginApi({
                             phone: this.form.phone,
                             password: this.form.password // 发送手机号和密码

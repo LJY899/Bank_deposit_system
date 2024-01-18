@@ -245,7 +245,7 @@
     </el-dialog>
 </div>
 
-<!-- 开发环境版本，包含了有帮助的命令行警告 -->
+<!-- 开发环境版本，包含了有帮助的命令行警告 -->2
 <script src="../../backend/plugins/vue/vue.js"></script>
 <!-- 引入组件库 -->
 <script src="../../backend/plugins/element-ui/index.js"></script>
@@ -285,12 +285,34 @@
         computed:{},
         created(){
             this.initData()
+            this.getPhoneNumber(); // 在创建时获取电话号码
         },
         mounted(){},
         methods:{
             convertDateToLocalDateTime(date) {
 
                     return date.toISOString(); // 返回符合 ISO 标准的字符串
+            },
+
+            getPhoneNumber() {
+                // 获取URL参数的函数
+                function getParameterByName(name, url) {
+                    name = name.replace(/[\[\]]/g, "\\$&");
+                    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+                        results = regex.exec(url);
+                    if (!results) return null;
+                    if (!results[2]) return '';
+                    return decodeURIComponent(results[2].replace(/\+/g, " "));
+                }
+
+                // 在页面加载时获取URL参数
+                var phone = getParameterByName('phone', window.location.href);
+
+                if (phone) {
+                    console.log('Received phone number:', phone);
+                    this.phone = phone; // 存储在Vue实例的phone属性中
+                    // 在这里可以进行其他操作，例如显示在页面上
+                }
             },
 
             async submitOrder(orderData) {
@@ -344,7 +366,7 @@
                 // 将购买成功的数据添加到订单数据
                 this.orderData = {
                     productId: this.selectedProduct.productId,
-                    userPhone: '15267123456',
+                    userPhone: this.phone,
                     amount: this.purchaseAmount,
                     status: 1,
                     // 其他订单相关数据...

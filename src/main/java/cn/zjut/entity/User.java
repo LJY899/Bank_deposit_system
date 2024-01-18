@@ -35,7 +35,7 @@ public class User implements Serializable {
     private String sex;
 
 
-    //身份证号
+    //银行卡号
     private String cardNumber;
 
 
