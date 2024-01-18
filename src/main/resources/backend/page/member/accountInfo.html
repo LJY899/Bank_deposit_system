@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>用户信息显示</title>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/layui/2.5.7/css/layui.css">
+    <script src="https://cdn.staticfile.org/layui/2.5.6/layui.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+
+<!-- Layui代码 -->
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-header">添加银行存款产品信息</div>
+        <div class="layui-card-body" style="padding: 15px;">
+            <form class="layui-form" action="" lay-filter="accountInfoForm">
+
+                <!-- Vue.js用户信息显示 -->
+                <div id="app">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">用户编号</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="userId" autocomplete="off" class="layui-input" :value="userInfo['id']" readonly>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">账号</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="username" autocomplete="off" class="layui-input" :value="userInfo['username']" readonly>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">用户名</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="name" autocomplete="off" class="layui-input" :value="userInfo['username']">
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">密码</label>
+                        <div class="layui-input-inline">
+                            <!-- 在前端不建议直接显示密码，这里只是一个例子 -->
+                            <input type="text" name="password" autocomplete="off" class="layui-input" :value="userInfo['password']">
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">电话</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="phone" autocomplete="off" class="layui-input" :value="userInfo['phone']">
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">性别</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="sex" autocomplete="off" class="layui-input" :value="userInfo['sex']">
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">身份证号</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="idNumber" autocomplete="off" class="layui-input" :value="userInfo['idNumber']">
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="layui-form-item layui-layout-admin">
+                    <div class="layui-input-block">
+                        <div class="layui-footer" style="left: 0;">
+                            <button class="layui-btn" lay-submit="" lay-filter="change" style="background-color: #ffc200; color: black; border-radius: 3px;border: 1px solid #d8dde3;">提交</button>
+                            <button class="layui-btn layui-btn-primary" style="background-color: black; color: white; border-radius: 3px; border: 1px solid #d8dde3;" @click="submitForm">修改</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    new Vue({
+        el: '#app',
+        data() {
+            return {
+                userInfo: {}
+            };
+        },
+        methods: {
+            // 从 localStorage 中获取保存的用户信息
+            fetchUserInfo() {
+                const storedUserInfo = localStorage.getItem('userInfo');
+
+                // 检查是否存在保存的用户信息
+                if (storedUserInfo) {
+                    // 解析 JSON 字符串并存储到 userInfo 数据中
+                    const parsedUserInfo = JSON.parse(storedUserInfo);
+
+                    // 更改属性名显示方式
+                    this.userInfo = {
+                        id: parsedUserInfo.id,
+                        username: parsedUserInfo.username,
+                        name: parsedUserInfo.name,
+                        password: '********',
+                        phone: parsedUserInfo.phone,
+                        sex: parsedUserInfo.sex === '1' ? '男' : '女',
+                        idNumber: parsedUserInfo.idNumber,
+                    };
+                } else {
+                    alert('未找到用户信息，请先登录。');
+                }
+            },
+            // 处理表单提交
+            submitForm() {
+                // 获取表单元素
+                const form = this.$refs.accountInfoForm;
+
+                // 提交表单
+                form.submit();
+            },
+            // 提示用户修改成功
+            showSuccessMessage() {
+                alert('用户信息修改成功！');
+            }
+        },
+        mounted() {
+            // 调用获取用户信息的方法
+            this.fetchUserInfo();
+        }
+    });
+
+    // 单独的submitForm函数
+    function submitForm() {
+        // 获取表单元素
+        var form = document.getElementById('accountInfoForm');
+
+        // 提交表单
+        form.submit();
+    }
+</script>
+
+</body>
+</html>
