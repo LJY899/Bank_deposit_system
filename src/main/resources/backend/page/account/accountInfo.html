@@ -46,7 +46,7 @@
                         <label class="layui-form-label">密码</label>
                         <div class="layui-input-inline">
                             <!-- 在前端不建议直接显示密码，这里只是一个例子 -->
-                            <input type="text" name="password" autocomplete="off" class="layui-input" :value="userInfo['password']">
+                            <input type="password" name="password" autocomplete="off" class="layui-input" :value="userInfo['password']">
                         </div>
                     </div>
 
@@ -108,7 +108,7 @@
                         id: parsedUserInfo.id,
                         username: parsedUserInfo.username,
                         name: parsedUserInfo.name,
-                        password: '********',
+                        password: parsedUserInfo.id,
                         phone: parsedUserInfo.phone,
                         sex: parsedUserInfo.sex === '1' ? '男' : '女',
                         idNumber: parsedUserInfo.idNumber,
