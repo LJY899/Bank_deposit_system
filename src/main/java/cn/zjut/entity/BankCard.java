@@ -10,7 +10,9 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import com.baomidou.mybatisplus.annotation.TableName;
 
+@TableName("bankcard")
 @Data
 public class BankCard implements Serializable{
 

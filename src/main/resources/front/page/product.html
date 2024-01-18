@@ -239,7 +239,7 @@
     <!-- 支付界面 -->
     <el-dialog :visible.sync="paymentVisible" title="支付确认" width="50%">
         <div class="payment-modal">
-            <input class="payment-input" v-model="paymentPassword" placeholder="请输入支付密码" />
+            <input class="payment-input" v-model="payPassword" placeholder="请输入支付密码" />
             <button class="payment-confirm-btn" @click="confirmPayment">确认支付</button>
         </div>
     </el-dialog>
@@ -271,8 +271,8 @@
                 dialogVisible: false,
                 selectedProduct: {},
                 purchaseVisible: false,
-                userCardNumber: '1234 **** **** 5678',
-                userBalance: '$10,000.00',
+                userCardNumber: '',
+                userBalance: '',
                 purchaseAmount: '',
                 passwordVisible: false,
                 password: '',
@@ -286,6 +286,7 @@
         created(){
             this.initData()
             this.getPhoneNumber(); // 在创建时获取电话号码
+            this.getUserData();     // 获取用户数据
         },
         mounted(){},
         methods:{
@@ -312,6 +313,49 @@
                     console.log('Received phone number:', phone);
                     this.phone = phone; // 存储在Vue实例的phone属性中
                     // 在这里可以进行其他操作，例如显示在页面上
+                }
+            },
+
+            async getUserData() {
+                try {
+                    const response = await $axios({
+                        url: '/bankcard/byPhoneNumber',  // 替换为实际的后端接口地址
+                        method: 'get',
+                        params: {
+                            phoneNumber: this.phone
+                        }
+                    });
+
+                    // 处理从后端获取的用户数据
+                    this.userCardNumber = response.data.cardNumber;
+                    this.userBalance = response.data.balance;
+                    this.paymentPassword=response.data.paymentPassword;
+                    // 可以添加其他需要的数据
+
+                } catch (error) {
+                    console.error('获取用户数据时出错', error);
+                }
+            },
+
+            // 添加此方法用于更新余额到数据库
+            async updateBalanceInDatabase(phoneNumber, newBalance) {
+                try {
+                    const response = await $axios({
+                        url: '/bankcard/updateBalance',
+                        method: 'post',
+                        data: {
+                            phoneNumber: phoneNumber,
+                            newBalance: newBalance,
+                        }
+                    });
+
+                    console.log('更新余额成功', response);
+                    // 在这里处理更新成功后的逻辑，如果需要的话
+                    console.log('成功调用更新余额');
+                } catch (error) {
+                    console.error('更新余额时出错', error);
+                    // 处理错误...
+                    throw error; // 抛出异常，让调用方处理错误
                 }
             },
 
@@ -355,7 +399,6 @@
                 this.purchaseVisible = true;
             },
             // 购买成功后的逻辑
-            // 购买成功后的逻辑
             purchaseSuccess() {
                 // 模拟购买成功后的逻辑
                 this.purchaseVisible = false;
@@ -372,14 +415,19 @@
                     // 其他订单相关数据...
                 };
                 // 购买成功后更新余额
-                const purchaseAmount = parseFloat(this.purchaseAmount);
-                const currentBalance = parseFloat(this.userBalance.replace('$', '').replace(',', ''));
+                const purchaseAmount = parseFloat(this.purchaseAmount); // 将购买金额转为浮点数，如果它不是浮点数的话
+                const currentBalance = parseFloat(this.userBalance.toString()); // 将 BigDecimal 转为字符串，再转为浮点数
                 const newBalance = currentBalance - purchaseAmount;
 
                 // 更新余额
-                this.userBalance = `$${newBalance.toFixed(2)}`;
+                this.userBalance = newBalance.toFixed(2); // 将结果转为字符串，保留两位小数
+
                 // 调用发送订单数据的方法
                 this.sendOrderData();
+
+                // 更新余额到数据库的逻辑
+                this.updateBalanceInDatabase(this.phone, newBalance);
+                console.log('成功调用更新余额');
             },
 
 
@@ -428,12 +476,13 @@
 
             // 确认支付
             confirmPayment() {
-                // 假设正确支付密码为 '1234'
-                const correctPaymentPassword = '1234';
+                // 获取输入框中的密码
+                const enteredPassword = this.payPassword;
 
-                console.log('Entered confirmPayment method'); // 添加这行
 
-                if (this.paymentPassword === correctPaymentPassword) {
+                console.log(enteredPassword); // 添加这行
+                console.log(this.paymentPassword);
+                if (enteredPassword === this.paymentPassword) {
                     // 支付密码正确，购买成功
                     this.paymentVisible = false;
                     this.$notify({
@@ -456,6 +505,8 @@
                     console.log('Entered password error branch'); // 添加这行
                 }
             },
+
+
 
             goBack(){
                 const url = document.referrer
