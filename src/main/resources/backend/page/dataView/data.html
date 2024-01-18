@@ -76,14 +76,13 @@
         url: '/api/sales',
         method: 'get'
     }).then(response => {
-        // response 本身就是您需要的数据数组
         const responseData = response;
 
         console.log("原始数据:", responseData);
 
         const formattedData = responseData.map(item => ({
-            value: item.totalAmount,  // 确保这里的属性与后端返回的一致
-            name: '产品 ' + item.productId
+            value: item.totalAmount,
+            name: item.productName
         }));
 
         console.log("格式化后的数据:", formattedData);
