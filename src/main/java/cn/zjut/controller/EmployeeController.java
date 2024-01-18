@@ -49,7 +49,7 @@ public class EmployeeController {
             //密码是否正确
         }else if (!emp.getPassword().equals(password)){
             return R.error("账户密码错误");
-            //员工账户状态是否正常，1：状态正常，0：封禁
+            //员工账户状态是否正常，1：状态正常，0：封禁EmployeeController
         }else if (emp.getStatus()!=1){
             return R.error("当前账户正在封禁");
             //状态正常允许登陆
@@ -57,6 +57,7 @@ public class EmployeeController {
             //登陆成功，将用户id存入Session并返回登录成功结果
             log.info("登陆成功，账户存入session");
             request.getSession().setAttribute("employee",emp.getId());
+            //组长你写错了employee->emp
             return R.success(employee);
         }
     }
