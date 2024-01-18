@@ -19,7 +19,7 @@ async function updateBalance(params) {
         });
 
         console.log('更新余额成功', response);
-        // 在这里处理更新成功后的逻辑，如果需要的话
+        // 处理更新成功后的逻辑
     } catch (error) {
         console.error('更新余额时出错', error);
         // 处理错误...

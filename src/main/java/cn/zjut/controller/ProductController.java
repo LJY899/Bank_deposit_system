@@ -25,11 +25,11 @@ public class ProductController {
     public R<Page<Product>> page(int page, int pageSize, String name) {
         Page<Product> pageInfo = new Page<>(page, pageSize);
         LambdaQueryWrapper<Product> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.like(name != null, Product::getName, name);
+        queryWrapper.like(name != null, Product::getName, name);//模糊查询
         queryWrapper.orderByDesc(Product::getUpdateTime);
         productService.page(pageInfo, queryWrapper);
 
-        // 直接返回分页对象即可，不需要额外操作
+        // 直接返回分页对象
         return R.success(pageInfo);
     }
     /**
@@ -69,7 +69,7 @@ public class ProductController {
         queryWrapper.orderByAsc(Product::getSort).orderByDesc(Product::getUpdateTime);
         List<Product> list = productService.list(queryWrapper);
 
-        // 直接返回列表即可，不需要额外操作
+        // 直接返回列表
         return R.success(list);
     }
 

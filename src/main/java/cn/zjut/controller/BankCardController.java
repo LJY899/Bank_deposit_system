@@ -20,7 +20,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/bankcard")
-@Slf4j
+@Slf4j//简化日志记录
 public class BankCardController {
     @Autowired
     private BankCardService bankcardService;
