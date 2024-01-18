@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>用户信息显示</title>
     <link rel="stylesheet" href="https://cdn.staticfile.org/layui/2.5.7/css/layui.css">
     <script src="https://cdn.staticfile.org/layui/2.5.6/layui.js"></script>
@@ -16,7 +17,7 @@
     <div class="layui-card">
         <div class="layui-card-header">添加银行存款产品信息</div>
         <div class="layui-card-body" style="padding: 15px;">
-            <form class="layui-form" action="" lay-filter="addProductForm">
+            <form class="layui-form" action="" lay-filter="accountInfoForm">
 
                 <!-- Vue.js用户信息显示 -->
                 <div id="app">
@@ -37,7 +38,7 @@
                     <div class="layui-form-item">
                         <label class="layui-form-label">用户名</label>
                         <div class="layui-input-inline">
-                            <input type="text" name="name" autocomplete="off" class="layui-input" :value="userInfo['username']">
+                            <input type="text" name="name" autocomplete="off" class="layui-input" :value="userInfo['name']">
                         </div>
                     </div>
 
@@ -75,8 +76,7 @@
                 <div class="layui-form-item layui-layout-admin">
                     <div class="layui-input-block">
                         <div class="layui-footer" style="left: 0;">
-                            <button class="layui-btn" lay-submit="" lay-filter="addProduct" style="background-color: #ffc200; color: black; border-radius: 3px;border: 1px solid #d8dde3;">提交</button>
-                            <button type="reset" class="layui-btn layui-btn-primary" style="background-color: black; color: white; border-radius: 3px; border: 1px solid #d8dde3;">重置</button>
+                            <button class="layui-btn" lay-submit="" lay-filter="change" style="background-color: #ffc200; color: black; border-radius: 3px;border: 1px solid #d8dde3;">提交</button>
                         </div>
                     </div>
                 </div>
@@ -86,7 +86,6 @@
 </div>
 
 <script>
-    // Vue.js代码
     new Vue({
         el: '#app',
         data() {
@@ -94,33 +93,76 @@
                 userInfo: {}
             };
         },
-        mounted() {
+        methods: {
             // 从 localStorage 中获取保存的用户信息
-            const storedUserInfo = localStorage.getItem('userInfo');
+            fetchUserInfo() {
+                const storedUserInfo = localStorage.getItem('userInfo');
 
-            // 检查是否存在保存的用户信息
-            if (storedUserInfo) {
-                // 解析 JSON 字符串并存储到 userInfo 数据中
-                const parsedUserInfo = JSON.parse(storedUserInfo);
+                // 检查是否存在保存的用户信息
+                if (storedUserInfo) {
+                    // 解析 JSON 字符串并存储到 userInfo 数据中
+                    const parsedUserInfo = JSON.parse(storedUserInfo);
 
-                // 更改属性名显示方式
-                this.userInfo = {
-                    id: parsedUserInfo.id,
-                    username: parsedUserInfo.username,
-                    name: parsedUserInfo.name,
-                    password: '********',
-                    phone: parsedUserInfo.phone,
-                    sex: parsedUserInfo.sex === '1' ? '男' : '女',
-                    idNumber: parsedUserInfo.idNumber,
-                };
-            } else {
-                alert('未找到用户信息，请先登录。');
+                    // 更改属性名显示方式
+                    this.userInfo = {
+                        id: parsedUserInfo.id,
+                        username: parsedUserInfo.username,
+                        name: parsedUserInfo.name,
+                        password: '********',
+                        phone: parsedUserInfo.phone,
+                        sex: parsedUserInfo.sex === '1' ? '男' : '女',
+                        idNumber: parsedUserInfo.idNumber,
+                    };
+                } else {
+                    alert('未找到用户信息，请先登录。');
+                }
+            },
+            submitForm() {
+                const form = this.$refs.accountInfoForm;
+                form.submit();
+            },
+            showSuccessMessage() {
+                alert('用户信息修改成功！');
             }
+        },
+        mounted() {
+            this.fetchUserInfo();
         }
     });
 
+    layui.use(['form'], function(){
+        var form = layui.form;
 
-    // Layui代码中的其他逻辑和函数
+        form.render(null, 'accountInfoForm');
+
+        form.on('submit(change)', function(data){
+            var UserInfo = {
+                userId: data.field.userId,
+                username: data.field.username,
+                name: data.field.name,
+                password: data.field.password,
+                phone: data.field.phone,
+                sex: data.field.sex,
+                idNumber: data.field.idNumber
+            };
+
+            $.ajax({
+                url: '/employee',
+                type: 'PUT',
+                contentType: 'application/json',
+                data: JSON.stringify(UserInfo),
+                success: function(response) {
+                    alert('提交成功！');
+                },
+                error: function(error) {
+                    alert('提交失败，请稍后重试！');
+                }
+            });
+
+            return false;
+        });
+
+    });
 </script>
 
 </body>
