@@ -150,7 +150,7 @@ public class AccountController {
             employee.setUpdateUser(empId);
             employeeService.updateById(employee);
             // 返回完整的员工信息，包括更新后的员工ID
-            R<Employee> successResponse = R.success(employee, "员工信息修改成功");
+            R<Employee> successResponse = R.success(employee);
 
             // 将更新后的员工信息存储到 session 中
             request.getSession().setAttribute("employee", employee.getId());
