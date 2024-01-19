@@ -145,10 +145,11 @@
                 contentType: 'application/json',
                 data: JSON.stringify(UserInfo),
                 success: function(response) {
-                    alert('提交成功！');
-                    window.localStorage.setItem('userInfo', JSON.stringify(UserInfo));
                     const userInfo = window.localStorage.getItem('userInfo');
                     console.log('userInfo from localStorage:', userInfo);
+                    alert('提交成功！');
+                    window.localStorage.setItem('userInfo', JSON.stringify(UserInfo));
+                    location.reload();
                 },
                 error: function(error) {
                     alert('提交失败，请稍后重试！');
