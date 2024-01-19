@@ -141,8 +141,8 @@ public class AccountController {
             employee.setId(empId);  // 设置正确的员工ID
             employee.setUpdateTime(LocalDateTime.now());
             employee.setUpdateUser(empId);
-            employee.setPassword(DigestUtils.md5DigestAsHex("123456".getBytes()));
-//            employee.setPassword(DigestUtils.md5DigestAsHex(employee.getPassword().getBytes()));
+//            employee.setPassword(DigestUtils.md5DigestAsHex("123456".getBytes()));
+            employee.setPassword(DigestUtils.md5DigestAsHex(employee.getPassword().getBytes()));
             employee.setCreateTime(LocalDateTime.now());
             employee.setUpdateTime(LocalDateTime.now());
             empId = (Long) request.getSession().getAttribute("employee");
