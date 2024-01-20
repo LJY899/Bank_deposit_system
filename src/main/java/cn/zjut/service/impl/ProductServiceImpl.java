@@ -35,7 +35,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
      * @return
      */
     public Product getByIdWithFlavor(Long productId) {
-        //查询菜品基本信息，从dish表查询
+        //查询产品基本信息，从product表查询
         Product product = this.getById(productId);
         return product;
     }
